@@ -1,11 +1,5 @@
 const { z } = require("zod");
-const mongoose = require("mongoose");
-
-const userIdSchema = z
-  .string()
-  .refine((id) => mongoose.Types.ObjectId.isValid(id), {
-    message: "Invalid user ID",
-  });
+const { userIdSchema } = require("./userIdValidation");
 
 const createCardSchema = z.object({
   name: z.string().min(1).max(100),
