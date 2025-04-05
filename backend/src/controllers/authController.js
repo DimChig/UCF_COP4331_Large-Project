@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const {
   registerSchema,
@@ -34,7 +35,13 @@ exports.register = async (req, res) => {
       lastName: data.lastName,
     });
 
-    return res.status(200).json({ id: newUser._id });
+    // Return response
+    const response = {
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      token: generateJWTToken(newUser._id),
+    };
+    return res.status(200).json(response);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Server Error" });
@@ -61,13 +68,22 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    return res.status(200).json({
-      id: user._id,
+    // Return response
+    const response = {
       firstName: user.firstName,
       lastName: user.lastName,
-    });
+      token: generateJWTToken(user._id),
+    };
+    return res.status(200).json(response);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Server Error" });
   }
+};
+
+// Generate JWT
+const generateJWTToken = (userId) => {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
 };

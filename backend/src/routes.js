@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { jwtMiddleware } = require("./middleware/authMiddleware");
 const authController = require("./controllers/authController");
 const cardController = require("./controllers/cardController");
 
@@ -10,9 +11,9 @@ router.post("/api/register", authController.register);
 router.post("/api/login", authController.login);
 
 // POST /api/cards
-router.post("/api/cards", cardController.createCard);
+router.post("/api/cards", jwtMiddleware, cardController.createCard);
 
 // POST /api/searchcards
-router.post("/api/searchcards", cardController.searchCards);
+router.get("/api/cards", jwtMiddleware, cardController.searchCards);
 
 module.exports = router;
