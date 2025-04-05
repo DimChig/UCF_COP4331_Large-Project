@@ -1,0 +1,14 @@
+# node modules (both client & server)
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# builds
+build/
+dist/
+
+# logs
+*.log
+
+# environment variables
+.env
