@@ -3,7 +3,7 @@ import HomePage from "./pages/home/HomePage";
 import ErrorPage from "./pages/error/ErrorPage";
 import Layout from "./pages/Layout";
 import CardsPage from "./pages/cards/CardsPage";
-import CardPage from "./pages/cards/[id]/CardPage";
+import CardDetailsPage from "./pages/cards/[id]/CardDetailsPage";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
       },
       {
         path: "cards/:cardId",
-        element: <CardPage />,
+        element: <CardDetailsPage />,
       },
     ],
     errorElement: <ErrorPage />,

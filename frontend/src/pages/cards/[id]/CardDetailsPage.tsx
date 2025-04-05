@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 
-const CardPage = () => {
+const CardDetailsPage = () => {
   const { cardId } = useParams();
   return <div>CardPage {cardId}</div>;
 };
 
-export default CardPage;
+export default CardDetailsPage;
