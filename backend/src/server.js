@@ -2,12 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const connectMovieDb = require("./config/tmdb")
 
 // Initialize express
 const app = express();
 
 // Database connection
 connectDB();
+connectMovieDb();
 
 // Middleware
 app.use(cors());
