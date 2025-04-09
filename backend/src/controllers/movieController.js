@@ -1,4 +1,3 @@
-const { MovieDb } = require("moviedb-promise");
 const {
   searchMoviesSchema,
   getMoviesPathSchema,
@@ -13,21 +12,20 @@ const moviedb = getMovieDBClient();
 exports.getPopular = async (req, res) => {
   try {
     // Default values if params are undefined
-    const pageParam = req.params.page === undefined ? 1 : req.params.page;
-    const limitParam = req.params.limit === undefined ? 20 : req.params.limit;
+    const { page: pageParam = 1, limit: limitParam = 20 } = req.query;
 
     // Convert to numbers and validate
     const validation = getMoviesPathSchema.safeParse({
-      page: Number(pageParam),
-      limit: Number(limitParam),
+      page: parseInt(pageParam),
+      limit: parseInt(limitParam),
     });
 
     if (!validation.success) {
       return res.status(400).json(validation.error.errors);
     }
-
     const validatedData = validation.data;
 
+    // Call API
     const response = await moviedb.moviePopular({ page: validatedData.page });
 
     // Limit the results if needed
