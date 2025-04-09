@@ -25,6 +25,13 @@ router.post(
   commentsController.postComment
 );
 
+// Delete /api/comments
+router.delete(
+  "/api/movies/:movieId/comments/:commentId",
+  jwtMiddleware,
+  commentsController.deleteComment
+);
+
 // GET /api/movies/popular
 router.get("/api/movies/popular", movieController.getPopular);
 
