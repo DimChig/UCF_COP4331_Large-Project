@@ -3,7 +3,6 @@ const {
   searchMoviesSchema,
   movieIdSchema,
 } = require("../validations/movieValidation");
-const Movie = require("../models/Movie");
 const getMovieDBClient = require("../config/tmdb");
 
 // Get moviedb client

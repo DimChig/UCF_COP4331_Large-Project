@@ -1,22 +1,26 @@
 const Comment = require("../models/Comments");
+const { commentsSchema } = require("../validations/commentValidation");
 
 exports.postComments = async (req, res) => {
   try {
-    const { movieID, text } = req.body;
+    // Getting from request payload
+    const inputData = req.body;
 
-    // Check movieID and text
-    if (!movieID || !text) {
-      return res.status(400).json({ message: "movieID and text are required" });
+    // Validate the body with the Zod schema
+    const validation = commentsSchema.safeParse(inputData);
+    if (!validation.success) {
+      return res.status(400).json(validation.error.errors);
     }
+    const { movieId, text } = validation.data;
 
-    const newComment = new Comment({
-      userID: req.user._id, // auto-filled by JWT middleware
-      movieID: req.body.movieID,
-      text: req.body.text,
+    // Create comment
+    const newComment = await Comment.create({
+      userId: req.user._id, // auto-filled by JWT middleware
+      movieId: movieId,
+      text: text,
     });
 
-    await newComment.save();
-
+    // Return
     return res
       .status(201)
       .json({ message: "Comment posted!", comment: newComment });

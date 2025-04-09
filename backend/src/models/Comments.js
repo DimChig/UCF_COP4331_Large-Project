@@ -2,16 +2,16 @@ const mongoose = require("mongoose");
 
 const commentsSchema = new mongoose.Schema(
   {
-    //UserID
-    userID: {
+    //UserId
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
 
-    //MovieID
-    movieID: {
-      type: mongoose.Schema.Types.String,
+    //MovieId
+    movieId: {
+      type: Number,
       required: true,
     },
 
@@ -21,6 +21,7 @@ const commentsSchema = new mongoose.Schema(
       required: false,
       trim: true,
       minlength: 1,
+      maxlength: 500,
     },
   },
   //get timestamps
