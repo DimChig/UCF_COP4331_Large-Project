@@ -22,7 +22,7 @@ interface ApiLoginResponse {
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
-  password: z.string(),
+  password: z.string().nonempty({ message: "Please enter a password" }),
 });
 
 const LoginForm = () => {
