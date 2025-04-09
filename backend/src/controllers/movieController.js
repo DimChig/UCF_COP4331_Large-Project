@@ -1,6 +1,6 @@
 const {
   searchMoviesSchema,
-  getMoviesPathSchema,
+  getMoviesSchema,
 } = require("../validations/movieValidation");
 const Movie = require("../models/Movie");
 const getMovieDBClient = require("../config/tmdb");
@@ -8,28 +8,28 @@ const getMovieDBClient = require("../config/tmdb");
 // Get moviedb client
 const moviedb = getMovieDBClient();
 
-// get Popular
-exports.getPopular = async (req, res) => {
+// Utility function to handle movie requests
+const handleMovieRequest = async (req, res, apiCall) => {
   try {
-    // Default values if params are undefined
+    // Extract default values from query parameters
     const { page: pageParam = 1, limit: limitParam = 20 } = req.query;
 
-    // Convert to numbers and validate
-    const validation = getMoviesPathSchema.safeParse({
-      page: parseInt(pageParam),
-      limit: parseInt(limitParam),
+    // Validate using Zod. Note that the inputs come in as strings.
+    const validationResult = getMoviesSchema.safeParse({
+      page: pageParam,
+      limit: limitParam,
     });
 
-    if (!validation.success) {
-      return res.status(400).json(validation.error.errors);
+    if (!validationResult.success) {
+      return res.status(400).json(validationResult.error.errors);
     }
-    const validatedData = validation.data;
+    const { page, limit } = validationResult.data;
 
-    // Call API
-    const response = await moviedb.moviePopular({ page: validatedData.page });
+    // Call the provided API call function with validated page number.
+    const response = await apiCall(page);
 
-    // Limit the results if needed
-    const results = response.results.slice(0, validatedData.limit);
+    // Slice the results according to validated limit
+    const results = response.results.slice(0, limit);
 
     return res.status(200).json({
       page: response.page,
@@ -38,113 +38,36 @@ exports.getPopular = async (req, res) => {
       total_results: response.total_results,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Server Error" });
+    return res.status(500).json({ error: `Server Error: ${err}` });
   }
+};
+
+// get Popular
+exports.getPopular = async (req, res) => {
+  await handleMovieRequest(req, res, (page) => {
+    return moviedb.moviePopular({ page });
+  });
 };
 
 // get Now Playing
 exports.getNowPlaying = async (req, res) => {
-  try {
-    const { page = 1, limit = 20 } = req.params;
-
-    // Convert to numbers and validate
-    const validation = getMoviesPathSchema.safeParse({
-      page: Number(page),
-      limit: Number(limit),
-    });
-
-    if (!validation.success) {
-      return res.status(400).json(validation.error.errors);
-    }
-
-    const validatedData = validation.data;
-
-    const response = await moviedb.movieNowPlaying({
-      page: validatedData.page,
-    });
-
-    // Limit the results if needed
-    const results = response.results.slice(0, validatedData.limit);
-
-    return res.status(200).json({
-      page: response.page,
-      results,
-      total_pages: response.total_pages,
-      total_results: response.total_results,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Server Error" });
-  }
+  await handleMovieRequest(req, res, (page) => {
+    return moviedb.movieNowPlaying({ page });
+  });
 };
 
 // get Top Rated
 exports.getTopRated = async (req, res) => {
-  try {
-    const { page = 1, limit = 20 } = req.params;
-
-    // Convert to numbers and validate
-    const validation = getMoviesPathSchema.safeParse({
-      page: Number(page),
-      limit: Number(limit),
-    });
-
-    if (!validation.success) {
-      return res.status(400).json(validation.error.errors);
-    }
-
-    const validatedData = validation.data;
-
-    const response = await moviedb.movieTopRated({ page: validatedData.page });
-
-    // Limit the results if needed
-    const results = response.results.slice(0, validatedData.limit);
-
-    return res.status(200).json({
-      page: response.page,
-      results,
-      total_pages: response.total_pages,
-      total_results: response.total_results,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Server Error" });
-  }
+  await handleMovieRequest(req, res, (page) => {
+    return moviedb.movieTopRated({ page });
+  });
 };
 
 // get Upcoming
 exports.getUpcoming = async (req, res) => {
-  try {
-    const { page = 1, limit = 20 } = req.params;
-
-    // Convert to numbers and validate
-    const validation = getMoviesPathSchema.safeParse({
-      page: Number(page),
-      limit: Number(limit),
-    });
-
-    if (!validation.success) {
-      return res.status(400).json(validation.error.errors);
-    }
-
-    const validatedData = validation.data;
-
-    const response = await moviedb.upcomingMovies({ page: validatedData.page });
-
-    // Limit the results if needed
-    const results = response.results.slice(0, validatedData.limit);
-
-    return res.status(200).json({
-      page: response.page,
-      results,
-      total_pages: response.total_pages,
-      total_results: response.total_results,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Server Error" });
-  }
+  await handleMovieRequest(req, res, (page) => {
+    return moviedb.upcomingMovies({ page });
+  });
 };
 
 // Search movie by name (could be modified to include more search terms)

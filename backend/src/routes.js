@@ -19,23 +19,15 @@ router.get("/api/searchcards", jwtMiddleware, cardController.searchCards);
 
 // GET /api/movies/popular
 router.get("/api/movies/popular", movieController.getPopular);
-router.get("/api/movies/popular/:page", movieController.getPopular);
-router.get("/api/movies/popular/:page/:limit", movieController.getPopular);
 
 // GET /api/movies/now-playing
-router.get("/api/movies/now-playing", movieController.getNowPlaying)
-router.get("/api/movies/now-playing/:page", movieController.getNowPlaying)
-router.get("/api/movies/now-playing/:page/:limit", movieController.getNowPlaying)
+router.get("/api/movies/now-playing", movieController.getNowPlaying);
 
 // GET /api/movies/top-rated
-router.get("/api/movies/top-rated", movieController.getTopRated)
-router.get("/api/movies/top-rated/:page", movieController.getTopRated)
-router.get("/api/movies/top-rated/:page/:limit", movieController.getTopRated)
+router.get("/api/movies/top-rated", movieController.getTopRated);
 
 // GET /api/movies/upcoming
 router.get("/api/movies/upcoming", movieController.getUpcoming);
-router.get("/api/movies/upcoming/:page", movieController.getUpcoming);
-router.get("/api/movies/upcoming/:page/:limit", movieController.getUpcoming);
 
 // GET /api/movies/searchMovies
 router.get("/api/movies/searchmovies", movieController.searchMovies);

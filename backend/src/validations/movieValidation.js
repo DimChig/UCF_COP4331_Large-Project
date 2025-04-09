@@ -6,12 +6,15 @@ const searchMoviesSchema = z.object({
   limit: z.coerce.number().min(1).max(30).optional().default(15),
 });
 
-const getMoviesPathSchema = z.object({
-  page: z.number().positive().default(1),
-  limit: z.number().min(1).max(30).default(20),
+const getMoviesSchema = z.object({
+  page: z.preprocess((val) => Number(val), z.number().positive().default(1)),
+  limit: z.preprocess(
+    (val) => Number(val),
+    z.number().min(1).max(30).default(20)
+  ),
 });
 
 module.exports = {
   searchMoviesSchema,
-  getMoviesPathSchema,
+  getMoviesSchema,
 };
