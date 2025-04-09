@@ -5,6 +5,11 @@ const { commentSchema } = require("../validations/commentValidation");
 const { movieIdSchema } = require("../validations/movieValidation");
 const { objectIdSchema } = require("../validations/objectIdValidation");
 
+/**
+ * POST /api/movies/{movieId}/comments
+ * Creates a new comment for the specified movie by the authenticated user.
+ * Expects a payload with a "text" field. Returns the created comment and a success message.
+ */
 exports.postComment = async (req, res) => {
   try {
     // Validate Movie ID
@@ -43,6 +48,11 @@ exports.postComment = async (req, res) => {
   }
 };
 
+/**
+ * DELETE /api/movies/{movieId}/comments/{commentId}
+ * Deletes a comment for the specified movie if it belongs to the authenticated user.
+ * Returns a success message if the comment is deleted.
+ */
 exports.deleteComment = async (req, res) => {
   try {
     // Validate Movie ID
@@ -84,57 +94,25 @@ exports.deleteComment = async (req, res) => {
 
 // Search cards
 /**
- * @swagger
- * /comments/{movieId}:
- *   get:
- *     summary: Retrieve comments for a given movie.
- *     description: >
- *       Returns a list of comments for the specified movie ID. Each comment object includes
- *       the comment text, its creation timestamp, the author’s first and last name, and a flag
- *       (isMine) indicating whether the comment was created by the authenticated user.
- *     parameters:
- *       - in: path
- *         name: movieId
- *         schema:
- *           type: integer
- *         required: true
- *         description: The unique identifier of the movie.
- *     responses:
- *       200:
- *         description: A JSON object containing an array of comments.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 results:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       text:
- *                         type: string
- *                         example: Sigma Boiii
- *                       createdAt:
- *                         type: string
- *                         format: date-time
- *                         example: 2025-04-09T19:28:32.753Z
- *                       author:
- *                         type: object
- *                         properties:
- *                           firstName:
- *                             type: string
- *                             example: Dmytro
- *                           lastName:
- *                             type: string
- *                             example: Chygarov
- *                       isMine:
- *                         type: boolean
- *                         example: true
- *       400:
- *         description: Bad Request - invalid movie ID supplied.
- *       500:
- *         description: Server error.
+ * GET /api/movies/{movieId}/comments
+ * Returns comments for a given movie. Each comment contains:
+ * - text: string
+ * - createdAt: timestamp
+ * - author: { firstName, lastName }
+ * - isMine: boolean (true if the comment belongs to the authenticated user)
+ *
+ * Response JSON format:
+ * {
+ *   "results": [
+ *     {
+ *       "text": "This is a comment",
+ *       "createdAt": "2025-04-09T19:28:32.753Z",
+ *       "author": { "firstName": "Dmytro", "lastName": "Chygarov" },
+ *       "isMine": true
+ *     },
+ *     ...
+ *   ]
+ * }
  */
 exports.getComments = async (req, res) => {
   try {
