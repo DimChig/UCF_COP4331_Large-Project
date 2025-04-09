@@ -1,6 +1,6 @@
 const {
+  baseMoviesSchema,
   searchMoviesSchema,
-  getMoviesSchema,
 } = require("../validations/movieValidation");
 const Movie = require("../models/Movie");
 const getMovieDBClient = require("../config/tmdb");
@@ -9,85 +9,41 @@ const getMovieDBClient = require("../config/tmdb");
 const moviedb = getMovieDBClient();
 
 // Utility function to handle movie requests
-const handleMovieRequest = async (req, res, apiCall) => {
+const handleMovieRequest = async (req, res, apiCall, extraSchema = null) => {
   try {
-    // Extract default values from query parameters
+    // Use default values (provided as fallback during destructuring)
     const { page: pageParam = 1, limit: limitParam = 20 } = req.query;
 
-    // Validate using Zod. Note that the inputs come in as strings.
-    const validationResult = getMoviesSchema.safeParse({
+    // Validate the common parameters
+    const baseValidation = baseMoviesSchema.safeParse({
       page: pageParam,
       limit: limitParam,
     });
 
-    if (!validationResult.success) {
-      return res.status(400).json(validationResult.error.errors);
+    if (!baseValidation.success) {
+      return res.status(400).json(baseValidation.error.errors);
     }
-    const { page, limit } = validationResult.data;
+    let validatedData = baseValidation.data;
 
-    // Call the provided API call function with validated page number.
-    const response = await apiCall(page);
-
-    // Slice the results according to validated limit
-    const results = response.results.slice(0, limit);
-
-    return res.status(200).json({
-      page: response.page,
-      results,
-      total_pages: response.total_pages,
-      total_results: response.total_results,
-    });
-  } catch (err) {
-    return res.status(500).json({ error: `Server Error: ${err}` });
-  }
-};
-
-// get Popular
-exports.getPopular = async (req, res) => {
-  await handleMovieRequest(req, res, (page) => {
-    return moviedb.moviePopular({ page });
-  });
-};
-
-// get Now Playing
-exports.getNowPlaying = async (req, res) => {
-  await handleMovieRequest(req, res, (page) => {
-    return moviedb.movieNowPlaying({ page });
-  });
-};
-
-// get Top Rated
-exports.getTopRated = async (req, res) => {
-  await handleMovieRequest(req, res, (page) => {
-    return moviedb.movieTopRated({ page });
-  });
-};
-
-// get Upcoming
-exports.getUpcoming = async (req, res) => {
-  await handleMovieRequest(req, res, (page) => {
-    return moviedb.upcomingMovies({ page });
-  });
-};
-
-// Search movie by name (could be modified to include more search terms)
-exports.searchMovies = async (req, res) => {
-  try {
-    // Getting from request payload
-    const inputData = req.body;
-
-    const validation = searchMoviesSchema.safeParse(inputData);
-    if (!validation.success) {
-      return res.status(400).json(validation.error.errors);
+    // If an extra schema is provided, validate additional query parameters.
+    if (extraSchema) {
+      const extraValidation = extraSchema.safeParse(req.query);
+      if (!extraValidation.success) {
+        console.log("asd");
+        return res.status(400).json(extraValidation.error.errors);
+      }
+      // Merge extra validated properties in
+      validatedData = { ...validatedData, ...extraValidation.data };
     }
 
-    const { query, page = 1, limit = 15 } = validation.data;
+    console.log(validatedData);
+    // Call the provided API function with the validated parameters.
+    const response = await apiCall(validatedData);
 
-    const response = await moviedb.searchMovie({ query, page });
+    // Limit results to the validated limit.
+    const results = response.results.slice(0, validatedData.limit);
 
-    // Limit the results if needed
-    const results = response.results.slice(0, limit);
-
+    // Generate return json
     return res.status(200).json({
       page: response.page,
       results,
@@ -96,8 +52,48 @@ exports.searchMovies = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Server Error" });
+    return res.status(500).json({ error: `Server Error: ${err}` });
   }
+};
+
+// get Popular
+exports.getPopular = async (req, res) => {
+  await handleMovieRequest(req, res, (data) => {
+    return moviedb.moviePopular({ page: data.page });
+  });
+};
+
+// get Now Playing
+exports.getNowPlaying = async (req, res) => {
+  await handleMovieRequest(req, res, (data) => {
+    return moviedb.movieNowPlaying({ page: data.page });
+  });
+};
+
+// get Top Rated
+exports.getTopRated = async (req, res) => {
+  await handleMovieRequest(req, res, (data) => {
+    return moviedb.movieTopRated({ page: data.page });
+  });
+};
+
+// get Upcoming
+exports.getUpcoming = async (req, res) => {
+  await handleMovieRequest(req, res, (data) => {
+    return moviedb.upcomingMovies({ page: data.page });
+  });
+};
+
+// Search movie by name
+exports.searchMovies = async (req, res) => {
+  await handleMovieRequest(
+    req,
+    res,
+    (data) => {
+      return moviedb.searchMovie({ page: data.page, query: data.query });
+    },
+    searchMoviesSchema
+  );
 };
 
 // Get movie details

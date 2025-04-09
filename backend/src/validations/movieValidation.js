@@ -1,12 +1,6 @@
 const { z } = require("zod");
 
-const searchMoviesSchema = z.object({
-  query: z.string().min(1).max(100),
-  page: z.coerce.number().positive().optional().default(1),
-  limit: z.coerce.number().min(1).max(30).optional().default(15),
-});
-
-const getMoviesSchema = z.object({
+const baseMoviesSchema = z.object({
   page: z.preprocess((val) => Number(val), z.number().positive().default(1)),
   limit: z.preprocess(
     (val) => Number(val),
@@ -14,7 +8,11 @@ const getMoviesSchema = z.object({
   ),
 });
 
+const searchMoviesSchema = z.object({
+  query: z.string().min(1, "Search query is required").optional(),
+});
+
 module.exports = {
+  baseMoviesSchema,
   searchMoviesSchema,
-  getMoviesSchema,
 };
