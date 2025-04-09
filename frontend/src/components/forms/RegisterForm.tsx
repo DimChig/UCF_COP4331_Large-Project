@@ -19,11 +19,13 @@ const formSchema = z.object({
   lastName: z.string().nonempty({ message: "Please enter your last name." }),
   password: z
     .string()
+    .trim()
     .min(4, { message: "Your password should be at least four characters." })
     .regex(
       // This regex puts a match to invalid passwords in a non-capturing group,
       // which lets us only capture *valid* passwords.
-      /(?:.{0,4}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/g,
+      // TODO: Find out why this sometimes doesnt detect invalid passwords.
+      /^(?:.{0,4}|[^0-9]*|[^A-Z]*|[^a-z]*|[^a-zA-Z0-9]*)$/g,
       {
         message:
           "Passwords need to have one lowercase letter, one uppercase letter, a number, and " +
@@ -130,7 +132,7 @@ const RegisterForm = () => {
         />
         <div className="flex flex-col w-full items-center justify-center space-y-2">
           <Button type="submit">Register</Button>
-          <Link to="/register" className="underline">
+          <Link to="/" className="underline">
             Already have an account? Login here!
           </Link>
         </div>
