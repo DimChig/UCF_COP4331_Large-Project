@@ -41,7 +41,7 @@ exports.postComment = async (req, res) => {
     // Return
     return res
       .status(201)
-      .json({ message: "Comment posted!", comment: newComment });
+      .json({ message: "Comment posted", comment: newComment });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server Error" });

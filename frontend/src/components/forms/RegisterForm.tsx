@@ -77,7 +77,7 @@ const RegisterForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="firstName"
@@ -85,7 +85,7 @@ const RegisterForm = () => {
             <FormItem>
               <FormLabel>First Name</FormLabel>
               <FormControl>
-                <Input placeholder="First Name" {...field} />
+                <Input placeholder="John" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,7 +98,7 @@ const RegisterForm = () => {
             <FormItem>
               <FormLabel>Last Name</FormLabel>
               <FormControl>
-                <Input placeholder="Last Name" {...field} />
+                <Input placeholder="Doe" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -124,16 +124,19 @@ const RegisterForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="password" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="flex flex-col w-full items-center justify-center space-y-2">
-          <Button type="submit">Register</Button>
-          <Link to="/" className="underline">
-            Already have an account? Login here!
+        <div className="flex flex-col w-full items-center justify-center space-y-4">
+          <Button type="submit" className="w-full">
+            Register
+          </Button>
+          <Link to="/">
+            Already have an account?{" "}
+            <span className="text-blue-500 hover:underline">Sign in</span>
           </Link>
         </div>
       </form>

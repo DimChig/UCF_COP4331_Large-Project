@@ -1,6 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,8 +8,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { z } from "zod";
 
 // TODO: Move API interfaces to their own file.
 interface ApiLoginResponse {
@@ -22,7 +22,7 @@ interface ApiLoginResponse {
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
-  password: z.string().nonempty({ message: "Please enter a password" }),
+  password: z.string().nonempty({ message: "Please enter a password." }),
 });
 
 const LoginForm = () => {
@@ -40,7 +40,10 @@ const LoginForm = () => {
       const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ login: values.email, password: values.password }),
+        body: JSON.stringify({
+          login: values.email,
+          password: values.password,
+        }),
       });
 
       if (!response.ok) {
@@ -61,7 +64,7 @@ const LoginForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="email"
@@ -88,10 +91,13 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <div className="flex flex-col w-full items-center justify-center space-y-2">
-          <Button type="submit">Login</Button>
-          <Link to="/register" className="underline">
-            Dont have an account? Create one here!
+        <div className="flex flex-col w-full items-center justify-center space-y-4">
+          <Button type="submit" className="w-full">
+            Login
+          </Button>
+          <Link to="/register">
+            Dont have an account?{" "}
+            <span className="text-blue-500 hover:underline">Sign up</span>
           </Link>
         </div>
       </form>
