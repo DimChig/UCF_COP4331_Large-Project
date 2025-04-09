@@ -1,4 +1,3 @@
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -8,51 +7,54 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
-// TODO: Move API interfaces to their own file.
-interface ApiLoginResponse {
-  firstName: string;
-  lastName: string;
-  token: string;
-};
-
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
-  password: z.string()
+  firstName: z.string().nonempty({ message: "Please enter your first name." }),
+  lastName: z.string().nonempty({ message: "Please enter your last name." }),
+  password: z
+    .string()
     .min(4, { message: "Your password should be at least four characters." })
-    .regex(  //! Put this in Register instead.
+    .regex(
       // This regex puts a match to invalid passwords in a non-capturing group,
       // which lets us only capture *valid* passwords.
       /(?:.{0,4}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/g,
       {
-        message: "Passwords need to have one lowercase letter, one uppercase letter, a number, and "
-          + "a special character."
+        message:
+          "Passwords need to have one lowercase letter, one uppercase letter, a number, and " +
+          "a special character.",
       }
-    )
+    ),
 });
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     // Since this wraps a react-hook-form, we have to give it defaults.
     defaultValues: {
       email: "",
-      password: ""
-    }
+      firstName: "",
+      lastName: "",
+      password: "",
+    },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ login: values.email, password: values.password })
+        body: JSON.stringify({
+          login: values.email,
+          password: values.password,
+          firstName: values.firstName,
+          lastName: values.lastName,
+        }),
       });
 
       if (!response.ok) {
@@ -62,19 +64,44 @@ const LoginForm = () => {
         return;
       }
 
-
-      const responseBody = await response.json() as ApiLoginResponse;
+      // const responseBody = await response.json() as ApiLoginResponse;
       console.log("Login success.");
     } catch (error: any) {
-      console.error(error.toString());  //* Temp.
+      console.error(error.toString()); //* Temp.
     }
 
-    console.log(values);  //! Remove me after debugging.
+    console.log(values); //! Remove me after debugging.
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="firstName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>First Name</FormLabel>
+              <FormControl>
+                <Input placeholder="First Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Last Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Last Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="email"
@@ -102,9 +129,9 @@ const LoginForm = () => {
           )}
         />
         <div className="flex flex-col w-full items-center justify-center space-y-2">
-          <Button type="submit">Login</Button>
+          <Button type="submit">Register</Button>
           <Link to="/register" className="underline">
-            Dont have an account? Create one here!
+            Already have an account? Login here!
           </Link>
         </div>
       </form>
@@ -112,4 +139,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
