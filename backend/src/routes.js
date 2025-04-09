@@ -18,18 +18,25 @@ router.post("/api/cards", jwtMiddleware, cardController.createCard);
 // POST /api/searchcards
 router.get("/api/searchcards", jwtMiddleware, cardController.searchCards);
 
-// POST /api/comments
+// POST comment
 router.post(
   "/api/movies/:movieId/comments",
   jwtMiddleware,
   commentsController.postComment
 );
 
-// Delete /api/comments
+// Delete comment
 router.delete(
   "/api/movies/:movieId/comments/:commentId",
   jwtMiddleware,
   commentsController.deleteComment
+);
+
+// Get comments
+router.get(
+  "/api/movies/:movieId/comments",
+  jwtMiddleware,
+  commentsController.getComments
 );
 
 // GET /api/movies/popular

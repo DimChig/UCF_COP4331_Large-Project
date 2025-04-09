@@ -1,3 +1,5 @@
+const { text } = require("express");
+const Comments = require("../models/Comments");
 const Comment = require("../models/Comments");
 const { commentSchema } = require("../validations/commentValidation");
 const { movieIdSchema } = require("../validations/movieValidation");
@@ -77,5 +79,105 @@ exports.deleteComment = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+// Search cards
+/**
+ * @swagger
+ * /comments/{movieId}:
+ *   get:
+ *     summary: Retrieve comments for a given movie.
+ *     description: >
+ *       Returns a list of comments for the specified movie ID. Each comment object includes
+ *       the comment text, its creation timestamp, the author’s first and last name, and a flag
+ *       (isMine) indicating whether the comment was created by the authenticated user.
+ *     parameters:
+ *       - in: path
+ *         name: movieId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The unique identifier of the movie.
+ *     responses:
+ *       200:
+ *         description: A JSON object containing an array of comments.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       text:
+ *                         type: string
+ *                         example: Sigma Boiii
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: 2025-04-09T19:28:32.753Z
+ *                       author:
+ *                         type: object
+ *                         properties:
+ *                           firstName:
+ *                             type: string
+ *                             example: Dmytro
+ *                           lastName:
+ *                             type: string
+ *                             example: Chygarov
+ *                       isMine:
+ *                         type: boolean
+ *                         example: true
+ *       400:
+ *         description: Bad Request - invalid movie ID supplied.
+ *       500:
+ *         description: Server error.
+ */
+exports.getComments = async (req, res) => {
+  try {
+    // Validate Movie ID
+    const validationMovieId = movieIdSchema.safeParse({
+      movieId: Number(req.params.movieId),
+    });
+    if (!validationMovieId.success) {
+      return res.status(400).json(validationMovieId.error.errors);
+    }
+    const { movieId } = validationMovieId.data;
+
+    // Get comments
+    const comments = await Comment.find({ movieId: movieId }).populate(
+      "userId",
+      "firstName lastName"
+    );
+
+    // Preprocess cards (reassign fields)
+    const ret = comments.map((comment) => ({
+      id: comments._id,
+      text: comment.text,
+      createdAt: comment.createdAt,
+      author: {
+        firstName: comment.userId.firstName,
+        lastName: comment.userId.lastName,
+      },
+      isMine: comment.userId._id.toString() === req.user._id.toString(),
+    }));
+
+    // Sort: First by isMine (mine first) and then by createdAt (most recent first)
+    ret.sort((a, b) => {
+      if (a.isMine === b.isMine) {
+        // Both are mine or not mine, sort by createdAt descending (most recent at top)
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      return a.isMine ? -1 : 1;
+    });
+
+    // Return
+    return res.status(200).json({ results: ret });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server Error" });
   }
 };
