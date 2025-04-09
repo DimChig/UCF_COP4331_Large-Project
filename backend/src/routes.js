@@ -19,7 +19,11 @@ router.post("/api/cards", jwtMiddleware, cardController.createCard);
 router.get("/api/searchcards", jwtMiddleware, cardController.searchCards);
 
 // POST /api/comments
-router.post("/api/comments", jwtMiddleware, commentsController.postComments);
+router.post(
+  "/api/movies/:movieId/comments",
+  jwtMiddleware,
+  commentsController.postComment
+);
 
 // GET /api/movies/popular
 router.get("/api/movies/popular", movieController.getPopular);

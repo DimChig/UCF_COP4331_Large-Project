@@ -29,7 +29,6 @@ const handleMovieRequest = async (req, res, apiCall, extraSchema = null) => {
     if (extraSchema) {
       const extraValidation = extraSchema.safeParse(req.query);
       if (!extraValidation.success) {
-        console.log("asd");
         return res.status(400).json(extraValidation.error.errors);
       }
       // Merge extra validated properties in

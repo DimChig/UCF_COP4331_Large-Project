@@ -1,17 +1,27 @@
 const Comment = require("../models/Comments");
-const { commentsSchema } = require("../validations/commentValidation");
+const { commentSchema } = require("../validations/commentValidation");
+const { movieIdSchema } = require("../validations/movieValidation");
 
-exports.postComments = async (req, res) => {
+exports.postComment = async (req, res) => {
   try {
-    // Getting from request payload
+    // Validate Movie ID
+    const validationMovieId = movieIdSchema.safeParse({
+      movieId: Number(req.params.movieId),
+    });
+    if (!validationMovieId.success) {
+      return res.status(400).json(validationMovieId.error.errors);
+    }
+    const { movieId } = validationMovieId.data;
+
+    // Getting comment args from request payload
     const inputData = req.body;
 
     // Validate the body with the Zod schema
-    const validation = commentsSchema.safeParse(inputData);
-    if (!validation.success) {
-      return res.status(400).json(validation.error.errors);
+    const validationComment = commentSchema.safeParse(inputData);
+    if (!validationComment.success) {
+      return res.status(400).json(validationComment.error.errors);
     }
-    const { movieId, text } = validation.data;
+    const { text } = validationComment.data;
 
     // Create comment
     const newComment = await Comment.create({
