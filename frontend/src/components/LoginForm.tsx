@@ -14,11 +14,19 @@ import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
+// TODO: Move API interfaces to their own file.
+interface ApiLoginResponse {
+  firstName: string;
+  lastName: string;
+  token: string;
+};
+
+
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
   password: z.string()
     .min(4, { message: "Your password should be at least four characters." })
-    .regex(
+    .regex(  //! Put this in Register instead.
       // This regex puts a match to invalid passwords in a non-capturing group,
       // which lets us only capture *valid* passwords.
       /(?:.{0,4}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/g,
@@ -39,8 +47,28 @@ const LoginForm = () => {
     }
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Now we have type-safe and verified access to correct data.
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ login: values.email, password: values.password })
+      });
+
+      if (!response.ok) {
+        console.error(`API error: HTTP ${response.status} response.`);
+        // TODO: Display an error message to the user.
+
+        return;
+      }
+
+
+      const responseBody = await response.json() as ApiLoginResponse;
+      console.log("Login success.");
+    } catch (error: any) {
+      console.error(error.toString());  //* Temp.
+    }
+
     console.log(values);  //! Remove me after debugging.
   };
 
