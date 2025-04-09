@@ -4,6 +4,7 @@ const { jwtMiddleware } = require("./middleware/authMiddleware");
 const authController = require("./controllers/authController");
 const cardController = require("./controllers/cardController");
 const movieController = require("./controllers/movieController");
+const commentsController = require("./controllers/commentsController");
 
 // POST /api/register
 router.post("/api/register", authController.register);
@@ -16,6 +17,9 @@ router.post("/api/cards", jwtMiddleware, cardController.createCard);
 
 // POST /api/searchcards
 router.get("/api/searchcards", jwtMiddleware, cardController.searchCards);
+
+// POST /api/comments
+router.post("/api/comments", jwtMiddleware, commentsController.postComments);
 
 // GET /api/movies/popular
 router.get("/api/movies/popular", movieController.getPopular);
