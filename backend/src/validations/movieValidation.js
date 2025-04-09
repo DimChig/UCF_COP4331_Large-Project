@@ -12,7 +12,12 @@ const searchMoviesSchema = z.object({
   query: z.string().min(1, "Search query is required").optional(),
 });
 
+const movieIdSchema = z.object({
+  movieId: z.number().positive("Movie ID must be a positive number"),
+});
+
 module.exports = {
   baseMoviesSchema,
   searchMoviesSchema,
+  movieIdSchema,
 };

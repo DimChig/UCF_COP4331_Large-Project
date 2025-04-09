@@ -33,6 +33,6 @@ router.get("/api/movies/upcoming", movieController.getUpcoming);
 router.get("/api/movies/searchmovies", movieController.searchMovies);
 
 // GET /api/movies/:id
-router.get("/api/movies/:id", movieController.getMovieById);
+router.get("/api/movies/:movieId", movieController.getMovieById);
 
 module.exports = router;

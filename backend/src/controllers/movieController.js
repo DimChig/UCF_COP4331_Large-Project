@@ -1,6 +1,7 @@
 const {
   baseMoviesSchema,
   searchMoviesSchema,
+  movieIdSchema,
 } = require("../validations/movieValidation");
 const Movie = require("../models/Movie");
 const getMovieDBClient = require("../config/tmdb");
@@ -99,13 +100,16 @@ exports.searchMovies = async (req, res) => {
 // Get movie details
 exports.getMovieById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { movieId } = req.params;
 
-    if (!id) {
-      return res.status(400).json({ error: "Movie ID is required" });
+    // Validate ID
+    const validation = movieIdSchema.safeParse({ movieId: Number(movieId) });
+    if (!validation.success) {
+      return res.status(400).json(validation.error.errors);
     }
+    const validationData = validation.data;
 
-    const movie = await moviedb.movieInfo({ id });
+    const movie = await moviedb.movieInfo({ id: validationData.movieId });
 
     return res.status(200).json(movie);
   } catch (err) {
@@ -113,7 +117,7 @@ exports.getMovieById = async (req, res) => {
     if (err.response && err.response.status === 404) {
       return res.status(404).json({ error: "Movie not found" });
     }
-    return res.status(500).json({ error: "Server Error" });
+    return res.status(500).json({ error: `Server Error: ${err}` });
   }
 };
 
