@@ -4,8 +4,8 @@ import RegisterForm from "@/components/forms/RegisterForm";
 
 const RegisterPage = () => {
   return (
-    <div className="flex w-full h-full items-center justify-center">
-      <Card className="w-3/4 md:max-lg:w-1/2 lg:w-1/3">
+    <div className="flex w-full h-full items-center justify-center p-4">
+      <Card className="w-sm">
         <CardHeader>
           <CardTitle>Create an account</CardTitle>
         </CardHeader>
