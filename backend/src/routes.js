@@ -5,6 +5,8 @@ const authController = require("./controllers/authController");
 const cardController = require("./controllers/cardController");
 const movieController = require("./controllers/movieController");
 const commentsController = require("./controllers/commentsController");
+const userSettingsController = require("./controllers/userSettingsController");
+
 
 // POST /api/register
 router.post("/api/register", authController.register);
@@ -17,6 +19,19 @@ router.post("/api/cards", jwtMiddleware, cardController.createCard);
 
 // POST /api/searchcards
 router.get("/api/searchcards", jwtMiddleware, cardController.searchCards);
+
+//POST & DELETE like movie
+router.post("/api/movies/:movieId/like",  userSettingsController.likeMovie);
+router.delete("/api/movies/:movieId/like",userSettingsController.unlikeMovie);
+
+// POST & DELETE save movie
+router.post("/api/movies/:movieId/save",userSettingsController.saveMovie);
+router.delete("/api/movies/:movieId/save",userSettingsController.unsaveMovie);
+
+// POST & DELETE rate movie
+router.post("/api/movies/:movieId/rating", userSettingsController.rateMovie);
+router.delete("/api/movies/:movieId/rating",userSettingsController.unrateMovie);
+
 
 // POST comment
 router.post(
