@@ -3,11 +3,11 @@ const { ratingSchema } = require("../validations/userSettingsValidation");
 
 const updateSetting = async (req, res, update) => {
   try {
-    const userID = req.user_id;
-    const movieID = req.params.movieId;
+    const userId = req.user._id;
+    const movieId = req.params.movieId;
 
     const updated = await UserSettings.findOneAndUpdate(
-      { userID, movieID },
+      { userId, movieId },
       { $set: update },
       { new: true, upsert: true }
     );

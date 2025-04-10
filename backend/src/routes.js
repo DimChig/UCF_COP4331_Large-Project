@@ -8,7 +8,6 @@ const commentsController = require("./controllers/commentsController");
 const userSettingsController = require("./controllers/userSettingsController");
 const userMoviesController = require("./controllers/userMoviesController");
 
-
 // POST /api/register
 router.post("/api/register", authController.register);
 
@@ -22,20 +21,52 @@ router.post("/api/cards", jwtMiddleware, cardController.createCard);
 router.get("/api/searchcards", jwtMiddleware, cardController.searchCards);
 
 //POST & DELETE like movie
-router.post("/api/movies/:movieId/like",  userSettingsController.likeMovie);
-router.delete("/api/movies/:movieId/like",userSettingsController.unlikeMovie);
+router.post(
+  "/api/movies/:movieId/like",
+  jwtMiddleware,
+  userSettingsController.likeMovie
+);
+router.delete(
+  "/api/movies/:movieId/like",
+  jwtMiddleware,
+  userSettingsController.unlikeMovie
+);
 
 // POST & DELETE save movie
-router.post("/api/movies/:movieId/save",userSettingsController.saveMovie);
-router.delete("/api/movies/:movieId/save",userSettingsController.unsaveMovie);
+router.post(
+  "/api/movies/:movieId/save",
+  jwtMiddleware,
+  userSettingsController.saveMovie
+);
+router.delete(
+  "/api/movies/:movieId/save",
+  jwtMiddleware,
+  userSettingsController.unsaveMovie
+);
 
 // POST & DELETE rate movie
-router.post("/api/movies/:movieId/rating", userSettingsController.rateMovie);
-router.delete("/api/movies/:movieId/rating",userSettingsController.unrateMovie);
+router.post(
+  "/api/movies/:movieId/rating",
+  jwtMiddleware,
+  userSettingsController.rateMovie
+);
+router.delete(
+  "/api/movies/:movieId/rating",
+  jwtMiddleware,
+  userSettingsController.unrateMovie
+);
 
 // GET liked and saved movies
-router.get("/api/movies/liked", jwtMiddleware, userMoviesController.getLikedMovies);
-router.get("/api/movies/saved", jwtMiddleware, userMoviesController.getSavedMovies);
+router.get(
+  "/api/movies/liked",
+  jwtMiddleware,
+  userMoviesController.getLikedMovies
+);
+router.get(
+  "/api/movies/saved",
+  jwtMiddleware,
+  userMoviesController.getSavedMovies
+);
 
 // POST comment
 router.post(
