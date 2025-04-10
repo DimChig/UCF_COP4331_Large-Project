@@ -1,0 +1,41 @@
+const mongoose = require("mongoose");
+
+const userSettingsSchema = new mongoose.Schema(
+  {
+    userID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    movieID: {
+      type: Number,
+      required: true,
+    },
+
+    isLiked: {
+      type: Boolean,
+      default: false,
+    },
+
+    isSaved: {
+      type: Boolean,
+      default: false,
+    },
+
+    rating: {
+      type: Number,
+      default: null,
+      min: 0,
+      max: 10,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+// Ensure each user can only have one settings record per movie
+userSettingsSchema.index({ userID: 1, movieID: 1 }, { unique: true });
+
+module.exports = mongoose.model("UserSettings", userSettingsSchema);
