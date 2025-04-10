@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import ErrorPage from "../error/ErrorPage";
+import SortSelect from "./_components/SortSelect";
 
 export const categories: {
   title: string;
@@ -41,8 +42,20 @@ const MoviesPage = () => {
     return <ErrorPage />;
   }
   return (
-    <div className="flex flex-col items-center p-6">
+    <div className="flex flex-col items-start p-6 w-full">
       <div className="text-2xl font-semibold">{currentCategory?.title}</div>
+      <div className="flex w-full h-full gap-4">
+        <div className="flex flex-col items-center py-4 ">
+          <SortSelect currentFilter={currentFilter} />
+        </div>
+        <div className="grid grid-cols-4 w-full p-4 gap-4 bg-[green] h-fit">
+          <div>Card1</div>
+          <div>Card2</div>
+          <div>Card3</div>
+          <div>Card4</div>
+          <div>Card5</div>
+        </div>
+      </div>
     </div>
   );
 };
