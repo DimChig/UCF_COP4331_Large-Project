@@ -1,11 +1,11 @@
-import {createBrowserRouter} from "react-router-dom";
-import LoginPage from "./pages/login/LoginPage";
-import RegisterPage from "./pages/register/RegisterPage";
-import HomePage from "./pages/home/HomePage";
-import ErrorPage from "./pages/error/ErrorPage";
+import { createBrowserRouter } from "react-router-dom";
 import Layout from "./pages/Layout";
-import CardsPage from "./pages/cards/CardsPage";
 import CardDetailsPage from "./pages/cards/[cardId]/CardDetailsPage";
+import ErrorPage from "./pages/error/ErrorPage";
+import HomePage from "./pages/home/HomePage";
+import LoginPage from "./pages/login/LoginPage";
+import MoviesPage from "./pages/movies/MoviesPage";
+import RegisterPage from "./pages/register/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -14,19 +14,19 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <LoginPage />
+        element: <LoginPage />,
       },
       {
         path: "register",
-        element: <RegisterPage />
+        element: <RegisterPage />,
       },
       {
         path: "home",
-        element: <HomePage />
+        element: <HomePage />,
       },
       {
-        path: "cards",
-        element: <CardsPage />,
+        path: "movies",
+        element: <MoviesPage />,
       },
       {
         path: "cards/:cardId",
