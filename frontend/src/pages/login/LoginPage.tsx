@@ -10,7 +10,6 @@ const LoginPage = () => {
           <CardTitle>Login to your account</CardTitle>
         </CardHeader>
         <CardContent>
-          {/* TODO: Actually pass the parameters and shit here. */}
           <LoginForm />
         </CardContent>
       </Card>

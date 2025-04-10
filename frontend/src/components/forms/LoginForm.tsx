@@ -1,3 +1,5 @@
+import { baseUrl, saveAuthToken } from "@/api/apiClient";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,8 +11,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { z } from "zod";
 
 // TODO: Move API interfaces to their own file.
@@ -26,6 +31,9 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     // Since this wraps a react-hook-form, we have to give it defaults.
@@ -37,7 +45,7 @@ const LoginForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch(`${baseUrl}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -46,20 +54,34 @@ const LoginForm = () => {
         }),
       });
 
+      // If the response is not OK, attempt to parse error from server
       if (!response.ok) {
-        console.error(`API error: HTTP ${response.status} response.`);
-        // TODO: Display an error message to the user.
-
+        try {
+          const errorData = await response.json();
+          setErrorMessage(errorData?.error ?? "Unknown error occurred");
+        } catch {
+          setErrorMessage(`API error: HTTP ${response.status} response.`);
+        }
         return;
       }
 
-      const responseBody = (await response.json()) as ApiLoginResponse;
-      console.log("Login success.");
-    } catch (error: any) {
-      console.error(error.toString()); //* Temp.
-    }
+      // Clear any prior error message on success (optional)
+      setErrorMessage(null);
 
-    console.log(values); //! Remove me after debugging.
+      // Parse the successful response
+      const responseJson = await response.json();
+      const responseBody = responseJson as ApiLoginResponse;
+      saveAuthToken(responseBody.token);
+
+      // Route to home page
+      toast.success("Login successful", {
+        description: `Welcome back, ${responseBody.firstName}!`,
+      });
+      navigate("/");
+    } catch (error: any) {
+      // Ensure that we capture any thrown error message as a string
+      setErrorMessage(error?.message || String(error));
+    }
   };
 
   return (
@@ -92,6 +114,13 @@ const LoginForm = () => {
           )}
         />
         <div className="flex flex-col w-full items-center justify-center space-y-4">
+          {errorMessage && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{errorMessage}</AlertDescription>
+            </Alert>
+          )}
           <Button type="submit" className="w-full">
             Login
           </Button>
