@@ -1,6 +1,7 @@
 import MovieCard from "@/components/movie_card/MovieCard";
 import { MovieData } from "@/hooks/useMovies";
 import pandaImage from "@/assets/panda.png";
+import MoviesGridContainer from "./MoviesGridContainer";
 
 interface Props {
   movies: MovieData[] | undefined;
@@ -19,11 +20,11 @@ const MoviesGrid = ({ movies }: Props) => {
       </div>
     );
   return (
-    <div className="grid grid-cols-4 w-full p-4 gap-4 h-fit">
+    <MoviesGridContainer>
       {movies.map((movie) => (
         <MovieCard movie={movie} key={movie.id} />
       ))}
-    </div>
+    </MoviesGridContainer>
   );
 };
 
