@@ -6,6 +6,7 @@ const {
 
 const updateSetting = async (req, res, update) => {
   try {
+    // Get user ID from JWT middleware
     if (!req.user)
       return res.status(404).json({
         error: "User not found",
