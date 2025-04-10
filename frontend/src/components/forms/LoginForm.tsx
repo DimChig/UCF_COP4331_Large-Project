@@ -18,8 +18,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
 
-// TODO: Move API interfaces to their own file.
-interface ApiLoginResponse {
+export interface ApiLoginResponse {
   firstName: string;
   lastName: string;
   token: string;
@@ -73,10 +72,12 @@ const LoginForm = () => {
       const responseBody = responseJson as ApiLoginResponse;
       saveAuthToken(responseBody.token);
 
-      // Route to home page
+      // Notify the user that login was successful
       toast.success("Login successful", {
         description: `Welcome back, ${responseBody.firstName}!`,
       });
+
+      // Route to home page
       navigate("/");
     } catch (error: any) {
       // Ensure that we capture any thrown error message as a string

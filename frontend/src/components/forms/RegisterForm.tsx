@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -11,7 +12,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { baseUrl, saveAuthToken } from "@/api/apiClient";
+import { useState } from "react";
+import { toast } from "sonner";
+import { AlertCircle } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -21,20 +26,22 @@ const formSchema = z.object({
     .string()
     .trim()
     .min(4, { message: "Your password should be at least four characters." })
-    .regex(
-      // This regex puts a match to invalid passwords in a non-capturing group,
-      // which lets us only capture *valid* passwords.
-      // TODO: Find out why this sometimes doesnt detect invalid passwords.
-      /^(?:.{0,4}|[^0-9]*|[^A-Z]*|[^a-z]*|[^a-zA-Z0-9]*)$/g,
-      {
-        message:
-          "Passwords need to have one lowercase letter, one uppercase letter, a number, and " +
-          "a special character.",
-      }
-    ),
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).*$/, {
+      message:
+        "Passwords need to have one lowercase letter, one uppercase letter, a number, and a special character.",
+    }),
 });
 
+interface ApiRegisterResponse {
+  firstName: string;
+  lastName: string;
+  token: string;
+}
+
 const RegisterForm = () => {
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     // Since this wraps a react-hook-form, we have to give it defaults.
@@ -48,7 +55,7 @@ const RegisterForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await fetch("/api/register", {
+      const response = await fetch(`${baseUrl}/api/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -59,20 +66,36 @@ const RegisterForm = () => {
         }),
       });
 
+      // If the response is not OK, attempt to parse error from server
       if (!response.ok) {
-        console.error(`API error: HTTP ${response.status} response.`);
-        // TODO: Display an error message to the user.
-
+        try {
+          const errorData = await response.json();
+          setErrorMessage(errorData?.error ?? "Unknown error occurred");
+        } catch {
+          setErrorMessage(`API error: HTTP ${response.status} response.`);
+        }
         return;
       }
 
-      // const responseBody = await response.json() as ApiLoginResponse;
-      console.log("Login success.");
-    } catch (error: any) {
-      console.error(error.toString()); //* Temp.
-    }
+      // Clear any prior error message on success (optional)
+      setErrorMessage(null);
 
-    console.log(values); //! Remove me after debugging.
+      // Parse the successful response
+      const responseJson = await response.json();
+      const responseBody = responseJson as ApiRegisterResponse;
+      saveAuthToken(responseBody.token);
+
+      // Notify the user that registration was successful
+      toast.success("Registration successful", {
+        description: `Welcome, ${responseBody.firstName}!`,
+      });
+
+      // Route to home page
+      navigate("/");
+    } catch (error: any) {
+      // Ensure that we capture any thrown error message as a string
+      setErrorMessage(error?.message || String(error));
+    }
   };
 
   return (
@@ -131,6 +154,13 @@ const RegisterForm = () => {
           )}
         />
         <div className="flex flex-col w-full items-center justify-center space-y-4">
+          {errorMessage && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{errorMessage}</AlertDescription>
+            </Alert>
+          )}
           <Button type="submit" className="w-full">
             Register
           </Button>
