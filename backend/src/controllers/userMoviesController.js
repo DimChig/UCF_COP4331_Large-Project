@@ -8,7 +8,7 @@ const moviedb = getMovieDBClient();
 const getUserMovies = async (req, res, filter) => {
   try {
     // Get user ID from JWT middleware
-    const userId = req.user_id;
+    const userId = req.user._id;
 
     // Define the query based on the filter
     const query = { userId: userId };
@@ -34,7 +34,7 @@ const getUserMovies = async (req, res, filter) => {
     const moviePromises = userSettings.map(async (setting) => {
       try {
         // Fetch movie details from TMDB API
-        const movieDetails = await moviedb.movieInfo({ id: setting.movieID });
+        const movieDetails = await moviedb.movieInfo({ id: setting.movieId });
 
         // Add user-specific fields to the movie object
         return {
@@ -43,7 +43,7 @@ const getUserMovies = async (req, res, filter) => {
           isSaved: setting.isSaved || false,
         };
       } catch (error) {
-        console.error(`Error fetching movie ${setting.movieID}:`, error);
+        console.error(`Error fetching movie ${setting.movieId}:`, error);
         // Return null for failed requests
         return null;
       }
