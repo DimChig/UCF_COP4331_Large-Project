@@ -8,13 +8,11 @@ const moviedb = getMovieDBClient();
 const getUserMovies = async (req, res, filter) => {
   try {
     // Get user ID from JWT middleware
-<<<<<<< HEAD
     if (!req.user)
       return res.status(404).json({
         error: "User not found",
       });
-=======
->>>>>>> 5deee1ffe4f0db60f55ebc0aa6f0247066936e6b
+
     const userId = req.user._id;
 
     // Define the query based on the filter
@@ -50,11 +48,10 @@ const getUserMovies = async (req, res, filter) => {
           isSaved: setting.isSaved || false,
         };
       } catch (error) {
-<<<<<<< HEAD
-        console.error(`Error fetching movie ${setting.movieId}:`, error.status);
-=======
-        console.error(`Error fetching movie ${setting.movieId}:`, error);
->>>>>>> 5deee1ffe4f0db60f55ebc0aa6f0247066936e6b
+        console.error(
+          `Error fetching movie id=${setting.movieId}: Status`,
+          error.status
+        );
         // Return null for failed requests
         return null;
       }
