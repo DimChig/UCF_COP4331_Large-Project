@@ -148,12 +148,3 @@ exports.getMovieById = async (req, res) => {
     return res.status(500).json({ error: `Server Error: ${err}` });
   }
 };
-
-// exports.createMovieCard = async (req, res) => {
-//     try {
-//         const response = await fetch(url);
-//     } catch (err) {
-//         console.error(err);
-//         return res.status(500).json({ error: "Server Error" })
-//     }
-// }
