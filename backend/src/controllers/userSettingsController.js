@@ -3,6 +3,11 @@ const { ratingSchema } = require("../validations/userSettingsValidation");
 
 const updateSetting = async (req, res, update) => {
   try {
+    if (!req.user)
+      return res.status(404).json({
+        error: "User not found",
+      });
+
     const userId = req.user._id;
     const movieId = req.params.movieId;
 
