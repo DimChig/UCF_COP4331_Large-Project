@@ -36,7 +36,6 @@ const handleMovieRequest = async (req, res, apiCall, extraSchema = null) => {
       validatedData = { ...validatedData, ...extraValidation.data };
     }
 
-    console.log(validatedData);
     // Call the provided API function with the validated parameters.
     const response = await apiCall(validatedData);
 
@@ -45,7 +44,6 @@ const handleMovieRequest = async (req, res, apiCall, extraSchema = null) => {
 
     // Generate return json
     return res.status(200).json({
-      page: response.page,
       results,
       total_pages: response.total_pages,
       total_results: response.total_results,

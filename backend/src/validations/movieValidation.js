@@ -36,7 +36,7 @@ const sortByOptions = [
   "revenue.desc",
 ];
 
-const searchMoviesFiterSchema = z.object({
+const searchMoviesFilterSchema = z.object({
   genres: z.string().optional(),
   sortBy: z.enum(sortByOptions).optional(),
 });
