@@ -39,6 +39,9 @@ router.get(
   commentsController.getComments
 );
 
+// GET /api/movie
+router.get("/api/movies", movieController.getMovies);
+
 // GET /api/movies/popular
 router.get("/api/movies/popular", movieController.getPopular);
 

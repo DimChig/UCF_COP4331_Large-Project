@@ -2,6 +2,7 @@ const {
   baseMoviesSchema,
   searchMoviesSchema,
   movieIdSchema,
+  searchMoviesFilterSchema,
 } = require("../validations/movieValidation");
 const getMovieDBClient = require("../config/tmdb");
 
@@ -53,6 +54,36 @@ const handleMovieRequest = async (req, res, apiCall, extraSchema = null) => {
     console.error(err);
     return res.status(500).json({ error: `Server Error: ${err}` });
   }
+};
+
+const getCurrentDateFormatted = () => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+// get with filters and sorting
+exports.getMovies = async (req, res) => {
+  await handleMovieRequest(
+    req,
+    res,
+    (data) => {
+      return moviedb.discoverMovie({
+        page: data.page,
+        include_adult: false,
+        include_video: false,
+        language: "en",
+        with_genres: data.genres,
+        without_genres: "99,10755",
+        sort_by: data.sortBy,
+        "vote_count.gte": 200,
+        "release_date.lte": getCurrentDateFormatted(),
+      });
+    },
+    searchMoviesFilterSchema
+  );
 };
 
 // get Popular
