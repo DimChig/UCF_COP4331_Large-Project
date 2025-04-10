@@ -2,6 +2,9 @@ import { useSearchParams } from "react-router-dom";
 import ErrorPage from "../error/ErrorPage";
 import SortSelect from "./_components/SortSelect";
 import GenresSelect from "./_components/GenresSelect";
+import { useMovies } from "@/hooks/useMovies";
+import MoviesGrid from "./_components/MoviesGrid";
+import MoviesGridSkeletons from "./_components/MoviesGridSkeletons";
 
 export const categories: {
   title: string;
@@ -45,7 +48,12 @@ const MoviesPage = () => {
     return <ErrorPage />;
   }
 
-  //   const currentGenreFilter = searchParams.get("genres") || "";
+  const currentGenreFilter = searchParams.get("genres") || "";
+
+  const { data, isLoading, error } = useMovies(
+    currentSortFilter,
+    currentGenreFilter
+  );
 
   return (
     <div className="flex flex-col items-start p-6 w-full">
@@ -55,12 +63,14 @@ const MoviesPage = () => {
           <SortSelect currentFilter={currentSortFilter} />
           <GenresSelect />
         </div>
-        <div className="grid grid-cols-4 w-full p-4 gap-4 bg-[green] h-fit">
-          <div>Card1</div>
-          <div>Card2</div>
-          <div>Card3</div>
-          <div>Card4</div>
-          <div>Card5</div>
+        <div className="flex w-full">
+          {isLoading && <MoviesGridSkeletons />}
+          {error && (
+            <div className="flex w-full h-full justify-center items-center text-xl text-red-500">
+              {error.message}
+            </div>
+          )}
+          {!isLoading && !error && <MoviesGrid movies={data?.results} />}
         </div>
       </div>
     </div>

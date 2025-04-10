@@ -44,10 +44,9 @@ const GenresSelect = () => {
         <CardContent>
           <div className="flex flex-wrap gap-2">
             {genres.map((genre) => (
-              <button onClick={() => handleGenreClick(genre.id)}>
+              <button key={genre.id} onClick={() => handleGenreClick(genre.id)}>
                 <GenreBadge
                   genre={genre.name}
-                  key={genre.id}
                   isActive={isGenreActive(genre.id)}
                 />
               </button>
