@@ -15,7 +15,7 @@ const jwtMiddleware = async (req, res, next) => {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Get userID form token
+      // Get userId form token
       const userId = decoded.userId;
 
       // Get user from db

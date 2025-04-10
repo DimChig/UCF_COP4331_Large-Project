@@ -1,5 +1,12 @@
 const { z } = require("zod");
 const mongoose = require("mongoose");
+const { objectIdSchema } = require("./objectIdValidation");
+const { movieIdSchema } = require("./movieValidation");
+
+exports.updateSettingsSchema = z.object({
+  userId: objectIdSchema.shape.id, // Renaming "id" to "userId"
+  movieId: movieIdSchema.shape.movieId, // Reusing "movieId"
+});
 
 // Checking if rating is a value in between 0 and 10
 exports.ratingSchema = z.object({

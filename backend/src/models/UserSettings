@@ -36,6 +36,6 @@ const userSettingsSchema = new mongoose.Schema(
 );
 
 // Ensure each user can only have one settings record per movie
-userSettingsSchema.index({ userID: 1, movieID: 1 }, { unique: true });
+userSettingsSchema.index({ userId: 1, movieId: 1 }, { unique: true });
 
 module.exports = mongoose.model("UserSettings", userSettingsSchema);

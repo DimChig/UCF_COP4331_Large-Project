@@ -1,5 +1,8 @@
 const UserSettings = require("../models/UserSettings");
-const { ratingSchema } = require("../validations/userSettingsValidation");
+const {
+  ratingSchema,
+  updateSettingsSchema,
+} = require("../validations/userSettingsValidation");
 
 const updateSetting = async (req, res, update) => {
   try {
@@ -11,8 +14,19 @@ const updateSetting = async (req, res, update) => {
     const userId = req.user._id;
     const movieId = req.params.movieId;
 
+    const validation = updateSettingsSchema.safeParse({
+      userId: String(userId),
+      movieId: parseInt(movieId),
+    });
+    if (!validation.success) {
+      return res
+        .status(400)
+        .json({ message: "Invalid rating", errors: validation.error.errors });
+    }
+    const validationData = validation.data;
+
     const updated = await UserSettings.findOneAndUpdate(
-      { userId, movieId },
+      { userId: validationData.userId, movieId: validationData.movieId },
       { $set: update },
       { new: true, upsert: true }
     );
