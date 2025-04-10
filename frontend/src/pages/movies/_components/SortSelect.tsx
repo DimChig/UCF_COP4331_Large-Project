@@ -1,7 +1,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -27,7 +26,16 @@ interface Props {
 const SortSelect = ({ currentFilter }: Props) => {
   const [_searchParams, setSearchParams] = useSearchParams();
   const [selectedValue, setSelectedValue] = useState(currentFilter);
-  console.log(currentFilter);
+
+  const handleSortChange = (val: string) => {
+    setSelectedValue(val);
+
+    const updatedParams = new URLSearchParams(_searchParams);
+    updatedParams.set("sortBy", val);
+
+    setSearchParams(updatedParams);
+  };
+
   return (
     <div className="w-full">
       <Card className="w-fit gap-2">
@@ -35,13 +43,7 @@ const SortSelect = ({ currentFilter }: Props) => {
           <CardTitle>Sort</CardTitle>
         </CardHeader>
         <CardContent>
-          <Select
-            value={selectedValue}
-            onValueChange={(val) => {
-              setSelectedValue(val);
-              setSearchParams({ sortBy: val });
-            }}
-          >
+          <Select value={selectedValue} onValueChange={handleSortChange}>
             <SelectTrigger className="w-[220px]">
               <div className="flex items-center gap-1">
                 <div>Sort by:</div>
