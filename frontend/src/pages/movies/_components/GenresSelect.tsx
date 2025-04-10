@@ -1,32 +1,10 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { categories } from "../MoviesPage";
-import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import GenreBadge from "./GenreBadge";
 import { genres } from "./genres";
 
-interface Props {
-  currentFilter: string;
-}
-
-const GenresSelect = ({ currentFilter }: Props) => {
+const GenresSelect = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleGenreClick = (genreId: number) => {

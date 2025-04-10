@@ -1,23 +1,16 @@
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { categories } from "../MoviesPage";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { categories } from "../MoviesPage";
 
 interface Props {
   currentFilter: string;
