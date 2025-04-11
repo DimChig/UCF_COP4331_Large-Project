@@ -4,7 +4,6 @@ import ProfileCommentCard from "./ProfileCommentCard";
 
 const CommentsSection = () => {
   const { data: comments, isLoading, error } = useCommentsProfile();
-  console.log(comments);
   return (
     <div className="flex flex-col w-full">
       <div className="flex gap-2">
@@ -30,7 +29,11 @@ const CommentsSection = () => {
                   />
                 );
               })}
-              {/* Sentinel element for triggering next page fetch */}
+              {(!comments ||
+                !comments.results ||
+                comments.results.length == 0) && (
+                <div>You haven't posted any comments yet.</div>
+              )}
             </MoviesGridContainer>
           )}
         </div>

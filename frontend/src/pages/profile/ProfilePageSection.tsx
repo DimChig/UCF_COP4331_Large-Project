@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ProfilePageSection = ({ label, endpoint }: Props) => {
-  const { data: moviesLiked, isLoading, error } = useMoviesProfile(endpoint);
+  const { data: movies, isLoading, error } = useMoviesProfile(endpoint);
   return (
     <div className="flex flex-col w-full">
       <div className="flex gap-2">
@@ -25,7 +25,7 @@ const ProfilePageSection = ({ label, endpoint }: Props) => {
           )}
           {!isLoading && !error && (
             <MoviesGridContainer isGrid={false}>
-              {moviesLiked?.results.map((moviesLiked) => {
+              {movies?.results.map((moviesLiked) => {
                 return (
                   <MovieCard
                     movie={moviesLiked.movie_data}
@@ -35,7 +35,9 @@ const ProfilePageSection = ({ label, endpoint }: Props) => {
                   />
                 );
               })}
-              {/* Sentinel element for triggering next page fetch */}
+              {(!movies || !movies.results || movies.results.length == 0) && (
+                <div>You haven't {endpoint} any movies yet.</div>
+              )}
             </MoviesGridContainer>
           )}
         </div>

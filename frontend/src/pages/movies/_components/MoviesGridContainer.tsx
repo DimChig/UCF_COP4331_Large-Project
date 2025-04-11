@@ -15,7 +15,7 @@ const MoviesGridContainer = ({ children, isGrid = true }: Props) => {
     );
   return (
     <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-      <div className="flex w-full p-4 pb-8 gap-4 h-fit">{children}</div>
+      <div className="flex w-full p-5 gap-5 h-fit">{children}</div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );

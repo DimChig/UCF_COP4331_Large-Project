@@ -41,26 +41,6 @@ interface FetchResponseAllUserComments {
   total_results: number;
 }
 
-export const useMovies = (sortBy: string, genres: string) =>
-  useQuery<FetchResponseMovies>({
-    queryKey: ["movies", sortBy, genres],
-    queryFn: () => {
-      // Build the axios config to pass query parameters.
-      const config: AxiosRequestConfig = {
-        params: {
-          sortBy, // same as sortBy: sortBy
-          genres, // same as genres: genres
-        },
-      };
-
-      // Pass the config object as the second argument to axiosInstance.get
-      return axiosInstance
-        .get<FetchResponseMovies>("/api/movies", config)
-        .then((res) => res.data);
-    },
-    retry: 2,
-  });
-
 export const useInfiniteMovies = (sortBy: string, genres: string) =>
   useInfiniteQuery<FetchResponseMovies>({
     queryKey: ["movies", sortBy, genres],
@@ -83,25 +63,6 @@ export const useInfiniteMovies = (sortBy: string, genres: string) =>
         return pages.length + 1;
       }
       return undefined;
-    },
-    retry: 2,
-  });
-
-export const useMoviesSearch = (query: string) =>
-  useQuery<FetchResponseMovies>({
-    queryKey: ["movies", query],
-    queryFn: () => {
-      // Build the axios config to pass query parameters.
-      const config: AxiosRequestConfig = {
-        params: {
-          query,
-        },
-      };
-
-      // Pass the config object as the second argument to axiosInstance.get
-      return axiosInstance
-        .get<FetchResponseMovies>("/api/movies/search", config)
-        .then((res) => res.data);
     },
     retry: 2,
   });
@@ -134,7 +95,7 @@ export const useInfiniteMoviesSearch = (query: string) =>
 
 export const useMoviesProfile = (endpoint: string) =>
   useQuery<FetchResponseMoviesWithUserSettings>({
-    queryKey: ["movies", endpoint],
+    queryKey: ["movies", endpoint, getAuthToken()],
     queryFn: () => {
       // Build the axios config to pass query parameters.
       const config: AxiosRequestConfig = {
@@ -179,7 +140,7 @@ export const useUserSettings = () =>
 
 export const useCommentsProfile = () =>
   useQuery<FetchResponseAllUserComments>({
-    queryKey: ["comments"],
+    queryKey: ["comments", getAuthToken()],
     queryFn: () => {
       // Build the axios config to pass query parameters.
       const config: AxiosRequestConfig = {
