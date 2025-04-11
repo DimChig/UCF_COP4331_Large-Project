@@ -78,7 +78,7 @@ const LoginForm = () => {
       });
 
       // Route to home page
-      navigate("/movies");
+      navigate("/");
     } catch (error: any) {
       // Ensure that we capture any thrown error message as a string
       setErrorMessage(error?.message || String(error));
@@ -126,7 +126,8 @@ const LoginForm = () => {
             Login
           </Button>
           <Link to="/register">
-            Dont have an account? <span className="text-blue-500 hover:underline">Sign up</span>
+            Dont have an account?{" "}
+            <span className="text-blue-500 hover:underline">Sign up</span>
           </Link>
         </div>
       </form>
