@@ -22,7 +22,7 @@ interface Props {
   isSaved?: boolean;
 }
 
-function formatReleaseDate(releaseDate: string): string {
+export function formatDate(releaseDate: string): string {
   const date = new Date(releaseDate);
   return date.toLocaleDateString("en-US", {
     month: "short",
@@ -85,7 +85,7 @@ const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
           {movie.title}
         </CardTitle>
         <CardDescription className="flex justify-between">
-          <div>{formatReleaseDate(movie.release_date)}</div>
+          <div>{formatDate(movie.release_date)}</div>
           <Badge className={getRatingBadgeColor(rating)}>
             {/* {rating.toFixed(1)} */}
             {movie.id}
