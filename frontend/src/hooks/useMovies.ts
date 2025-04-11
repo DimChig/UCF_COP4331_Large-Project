@@ -36,6 +36,11 @@ interface FetchResponseMoviesWithUserSettings {
   total_results: number;
 }
 
+interface FetchResponseAllUserComments {
+  results: { movie_data: MovieData; text: string; createdAt: Date }[];
+  total_results: number;
+}
+
 export const useMovies = (sortBy: string, genres: string) =>
   useQuery<FetchResponseMovies>({
     queryKey: ["movies", sortBy, genres],
@@ -169,5 +174,24 @@ export const useUserSettings = () =>
         .then((res) => res.data);
     },
     staleTime: 0,
+    retry: 2,
+  });
+
+export const useCommentsProfile = () =>
+  useQuery<FetchResponseAllUserComments>({
+    queryKey: ["comments"],
+    queryFn: () => {
+      // Build the axios config to pass query parameters.
+      const config: AxiosRequestConfig = {
+        headers: {
+          Authorization: getAuthHeader(),
+        },
+      };
+
+      // Pass the config object as the second argument to axiosInstance.get
+      return axiosInstance
+        .get<FetchResponseAllUserComments>(`/api/comments`, config)
+        .then((res) => res.data);
+    },
     retry: 2,
   });
