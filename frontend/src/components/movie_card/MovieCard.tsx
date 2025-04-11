@@ -87,8 +87,7 @@ const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
         <CardDescription className="flex justify-between">
           <div>{formatDate(movie.release_date)}</div>
           <Badge className={getRatingBadgeColor(rating)}>
-            {/* {rating.toFixed(1)} */}
-            {movie.id}
+            {rating.toFixed(1)}
           </Badge>
         </CardDescription>
       </CardHeader>
