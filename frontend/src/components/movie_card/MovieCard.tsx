@@ -14,7 +14,7 @@ import {
   FaRegHeart,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "../ui/badge";
+import RatingBadge from "./RatingBadge";
 
 interface Props {
   movie: MovieData;
@@ -31,18 +31,8 @@ export function formatDate(releaseDate: string): string {
   });
 }
 
-const getRatingBadgeColor = (rating: number): string => {
-  if (rating >= 7) return "bg-green-500";
-  if (rating >= 6) return "bg-lime-500";
-  if (rating >= 5) return "bg-yellow-500";
-  if (rating >= 4) return "bg-amber-500";
-  if (rating >= 3) return "bg-orange-500";
-  return "bg-red-500";
-};
-
 const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
   const navigate = useNavigate();
-  const rating = movie.vote_average;
 
   return (
     <Card className="w-full min-w-[200px] shadow-md p-0 overflow-hidden gap-4">
@@ -86,9 +76,7 @@ const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
         </CardTitle>
         <CardDescription className="flex justify-between">
           <div>{formatDate(movie.release_date)}</div>
-          <Badge className={getRatingBadgeColor(rating)}>
-            {rating.toFixed(1)}
-          </Badge>
+          <RatingBadge rating={movie.vote_average} />
         </CardDescription>
       </CardHeader>
     </Card>
