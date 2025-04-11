@@ -1,8 +1,8 @@
 import { isAuthenticated } from "@/api/apiClient";
 import { useInfiniteMoviesSearch, useUserSettings } from "@/hooks/useMovies";
 import { useSearchParams } from "react-router-dom";
-import MoviesGrid from "../movies/_components/MoviesGrid";
-import MoviesGridSkeletons from "../movies/_components/MoviesGridSkeletons";
+import MoviesGridSearch from "./_components/MoviesGridSearch";
+import MoviesGridSkeletonsSearch from "./_components/MoviesGridSkeletonsSearch";
 
 const SearchPage = () => {
   const [searchParams, _setSearchParams] = useSearchParams();
@@ -36,14 +36,14 @@ const SearchPage = () => {
       </div>
       <div className="flex w-full h-full gap-4 pt-4">
         <div className="flex w-full">
-          {isLoading && <MoviesGridSkeletons />}
+          {isLoading && <MoviesGridSkeletonsSearch />}
           {error && (
             <div className="flex w-full h-full justify-center items-center text-xl text-red-500">
               {error.message}
             </div>
           )}
           {!isLoading && !error && (
-            <MoviesGrid
+            <MoviesGridSearch
               movies={movies}
               userSettings={userSettings}
               fetchNextPage={fetchNextPage}

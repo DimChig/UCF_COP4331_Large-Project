@@ -1,8 +1,7 @@
-import MovieCard from "@/components/movie_card/MovieCard";
+import PandaNoResults from "@/components/PandaNoResults";
+import MovieCardSearch from "@/pages/search/_components/MovieCardSearch";
 import { MovieData, UserSettings } from "@/hooks/useMovies";
 import { useEffect, useRef } from "react";
-import MoviesGridContainer from "./MoviesGridContainer";
-import PandaNoResults from "@/components/PandaNoResults";
 
 interface Props {
   movies: MovieData[] | undefined;
@@ -12,7 +11,7 @@ interface Props {
   isFetchingNextPage: boolean;
 }
 
-const MoviesGrid = ({
+const MoviesGridSearch = ({
   movies,
   userSettings,
   fetchNextPage,
@@ -45,11 +44,11 @@ const MoviesGrid = ({
 
   return (
     <div className="flex w-full h-full flex-col">
-      <MoviesGridContainer>
+      <div className="flex flex-col w-full p-4 gap-4 h-fit ">
         {movies.map((movie) => {
           const userSetting = userSettings?.find((s) => s.movieId === movie.id);
           return (
-            <MovieCard
+            <MovieCardSearch
               movie={movie}
               key={movie.id}
               isLiked={userSetting?.isLiked}
@@ -58,7 +57,7 @@ const MoviesGrid = ({
           );
         })}
         {/* Sentinel element for triggering next page fetch */}
-      </MoviesGridContainer>
+      </div>
       {hasNextPage && (
         <div ref={loadMoreRef} className="w-full text-center py-4 opacity-70">
           {isFetchingNextPage ? (
@@ -74,4 +73,4 @@ const MoviesGrid = ({
   );
 };
 
-export default MoviesGrid;
+export default MoviesGridSearch;
