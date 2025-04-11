@@ -6,10 +6,20 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MovieData } from "@/hooks/useMovies";
+import {
+  FaBookmark,
+  FaCommentDots,
+  FaHeart,
+  FaRegBookmark,
+  FaRegHeart,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { Badge } from "../ui/badge";
 
 interface Props {
   movie: MovieData;
+  isLiked?: boolean;
+  isSaved?: boolean;
 }
 
 function formatReleaseDate(releaseDate: string): string {
@@ -30,9 +40,10 @@ const getRatingBadgeColor = (rating: number): string => {
   return "bg-red-500";
 };
 
-const MovieCard: React.FC<Props> = ({ movie }) => {
+const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
+  const navigate = useNavigate();
   const rating = movie.vote_average;
-  // if (not loaded) return <MovieCardSkeleton />;
+
   return (
     <Card className="w-full shadow-md p-0 overflow-hidden gap-4">
       {/* Movie Poster */}
@@ -45,6 +56,27 @@ const MovieCard: React.FC<Props> = ({ movie }) => {
             className="w-full object-cover"
           />
         </div>
+        <div className="absolute inset-0">
+          <div
+            className="group w-full aspect-[2/3] bg-transparent hover:bg-black/30 cursor-pointer transition"
+            onClick={() => navigate(`/movies/${movie.id}`)}
+          >
+            <div className="flex opacity-0 group-hover:opacity-100 flex-col gap-8 w-full h-full items-center justify-center transition">
+              {isLiked ? (
+                <FaHeart className="w-8 h-8 text-rose-500" />
+              ) : (
+                <FaRegHeart className="w-8 h-8 text-white" />
+              )}
+              {isSaved ? (
+                <FaBookmark className="w-8 h-8 text-yellow-400" />
+              ) : (
+                <FaRegBookmark className="w-8 h-8 text-white" />
+              )}
+
+              <FaCommentDots className="w-8 h-8 text-white cursor-pointer" />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Header with title and release date */}
@@ -55,6 +87,7 @@ const MovieCard: React.FC<Props> = ({ movie }) => {
           <Badge className={getRatingBadgeColor(rating)}>
             {rating.toFixed(1)}
           </Badge>
+          <div>{movie.id}</div>
         </CardDescription>
       </CardHeader>
     </Card>

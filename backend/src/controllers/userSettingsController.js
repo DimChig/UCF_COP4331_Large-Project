@@ -33,8 +33,7 @@ const updateSetting = async (req, res, update) => {
     );
 
     return res.status(200).json({
-      message: "User settings updated successfully",
-      settings: updated,
+      updated,
     });
   } catch (err) {
     console.error(err);

@@ -2,9 +2,10 @@ import { useSearchParams } from "react-router-dom";
 import ErrorPage from "../error/ErrorPage";
 import SortSelect from "./_components/SortSelect";
 import GenresSelect from "./_components/GenresSelect";
-import { useMovies } from "@/hooks/useMovies";
+import { useMovies, useUserSettings } from "@/hooks/useMovies";
 import MoviesGrid from "./_components/MoviesGrid";
 import MoviesGridSkeletons from "./_components/MoviesGridSkeletons";
+import { isAuthenticated } from "@/api/apiClient";
 
 export const categories: {
   title: string;
@@ -55,6 +56,10 @@ const MoviesPage = () => {
     currentGenreFilter
   );
 
+  const { data: userSettings } = isAuthenticated()
+    ? useUserSettings()
+    : { data: [] };
+
   return (
     <div className="flex flex-col items-start p-6 w-full">
       <div className="text-2xl font-semibold">{currentCategory?.title}</div>
@@ -70,7 +75,9 @@ const MoviesPage = () => {
               {error.message}
             </div>
           )}
-          {!isLoading && !error && <MoviesGrid movies={data?.results} />}
+          {!isLoading && !error && (
+            <MoviesGrid movies={data?.results} userSettings={userSettings} />
+          )}
         </div>
       </div>
     </div>

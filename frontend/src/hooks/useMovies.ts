@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosRequestConfig } from "axios";
+import { getAuthHeader, getAuthToken } from "@/api/apiClient";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:5000/",
@@ -14,6 +15,13 @@ export interface MovieData {
   release_date: string;
   vote_average: number;
   vote_count: number;
+}
+
+export interface UserSettings {
+  movieId: number;
+  isLiked: boolean;
+  isSaved: boolean;
+  rating: number | null;
 }
 
 interface FetchResponseMovies {
@@ -39,5 +47,25 @@ export const useMovies = (sortBy: string, genres: string) =>
         .get<FetchResponseMovies>("/api/movies", config)
         .then((res) => res.data);
     },
+    retry: 2,
+  });
+
+export const useUserSettings = () =>
+  useQuery<UserSettings[]>({
+    queryKey: ["userSettings", getAuthToken()],
+    queryFn: () => {
+      // Build the axios config to pass query parameters.
+      const config: AxiosRequestConfig = {
+        headers: {
+          Authorization: getAuthHeader(),
+        },
+      };
+
+      // Pass the config object as the second argument to axiosInstance.get
+      return axiosInstance
+        .get<UserSettings[]>("/api/movies/raw", config)
+        .then((res) => res.data);
+    },
+    staleTime: 0,
     retry: 2,
   });

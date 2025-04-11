@@ -1,13 +1,14 @@
 import MovieCard from "@/components/movie_card/MovieCard";
-import { MovieData } from "@/hooks/useMovies";
+import { MovieData, UserSettings } from "@/hooks/useMovies";
 import pandaImage from "@/assets/panda.png";
 import MoviesGridContainer from "./MoviesGridContainer";
 
 interface Props {
   movies: MovieData[] | undefined;
+  userSettings: UserSettings[] | undefined;
 }
 
-const MoviesGrid = ({ movies }: Props) => {
+const MoviesGrid = ({ movies, userSettings }: Props) => {
   if (!movies || movies.length == 0)
     return (
       <div className="flex w-full h-full items-center justify-center">
@@ -19,11 +20,20 @@ const MoviesGrid = ({ movies }: Props) => {
         </div>
       </div>
     );
+
   return (
     <MoviesGridContainer>
-      {movies.map((movie) => (
-        <MovieCard movie={movie} key={movie.id} />
-      ))}
+      {movies.map((movie) => {
+        const userSetting = userSettings?.find((s) => s.movieId == movie.id);
+        return (
+          <MovieCard
+            movie={movie}
+            key={movie.id}
+            isLiked={userSetting?.isLiked}
+            isSaved={userSetting?.isSaved}
+          />
+        );
+      })}
     </MoviesGridContainer>
   );
 };
