@@ -4,6 +4,10 @@ const Comment = require("../models/Comments");
 const { commentSchema } = require("../validations/commentValidation");
 const { movieIdSchema } = require("../validations/movieValidation");
 const { objectIdSchema } = require("../validations/objectIdValidation");
+const getMovieDBClient = require("../config/tmdb");
+
+// Get moviedb client
+const moviedb = getMovieDBClient();
 
 /**
  * POST /api/movies/{movieId}/comments
@@ -154,6 +158,67 @@ exports.getComments = async (req, res) => {
 
     // Return
     return res.status(200).json({ results: ret });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
+
+exports.getAllUserComments = async (req, res) => {
+  try {
+    // Get user ID from JWT middleware
+    if (!req.user)
+      return res.status(404).json({
+        error: "User not found",
+      });
+
+    const userId = req.user._id;
+
+    // Get comments
+    const comments = await Comment.find({ userId: userId }).populate(
+      "userId",
+      "firstName lastName"
+    );
+
+    // Fetch movie details for each movie ID
+    const moviePromises = comments.map(async (comment) => {
+      try {
+        // Fetch movie details from TMDB API
+        const movieDetails = await moviedb.movieInfo({ id: comment.movieId });
+
+        // Add user-specific fields to the movie object
+        return {
+          id: comments._id,
+          text: comment.text,
+          createdAt: comment.createdAt,
+          movie_data: movieDetails,
+        };
+      } catch (error) {
+        console.error(
+          `Error fetching movie id=${comment.movieId}: Status`,
+          error.status
+        );
+        // Return null for failed requests
+        return null;
+      }
+    });
+
+    // Wait for all movie fetch operations to complete
+    const movies = await Promise.all(moviePromises);
+
+    // Filter out failed requests
+    const validMovies = movies.filter((movie) => movie !== null);
+
+    // Sort: by createdAt (most recent first)
+    validMovies.sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    // Return results
+    return res.status(200).json({
+      results: validMovies,
+      total_results: validMovies.length,
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Server Error" });

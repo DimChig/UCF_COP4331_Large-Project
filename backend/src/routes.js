@@ -90,6 +90,13 @@ router.get(
   commentsController.getComments
 );
 
+// Get all user comments
+router.get(
+  "/api/comments",
+  jwtMiddleware,
+  commentsController.getAllUserComments
+);
+
 // GET /api/movie
 router.get("/api/movies", movieController.getMovies);
 
