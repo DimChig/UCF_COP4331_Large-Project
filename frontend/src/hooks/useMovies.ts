@@ -50,6 +50,25 @@ export const useMovies = (sortBy: string, genres: string) =>
     retry: 2,
   });
 
+export const useMoviesSearch = (query: string) =>
+  useQuery<FetchResponseMovies>({
+    queryKey: ["movies", query],
+    queryFn: () => {
+      // Build the axios config to pass query parameters.
+      const config: AxiosRequestConfig = {
+        params: {
+          query,
+        },
+      };
+
+      // Pass the config object as the second argument to axiosInstance.get
+      return axiosInstance
+        .get<FetchResponseMovies>("/api/movies", config)
+        .then((res) => res.data);
+    },
+    retry: 2,
+  });
+
 export const useUserSettings = () =>
   useQuery<UserSettings[]>({
     queryKey: ["userSettings", getAuthToken()],
