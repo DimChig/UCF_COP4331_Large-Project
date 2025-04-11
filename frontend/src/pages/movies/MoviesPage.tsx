@@ -1,11 +1,11 @@
+import { isAuthenticated } from "@/api/apiClient";
+import { useInfiniteMovies, useUserSettings } from "@/hooks/useMovies";
 import { useSearchParams } from "react-router-dom";
 import ErrorPage from "../error/ErrorPage";
-import SortSelect from "./_components/SortSelect";
 import GenresSelect from "./_components/GenresSelect";
-import { useMovies, useUserSettings } from "@/hooks/useMovies";
 import MoviesGrid from "./_components/MoviesGrid";
 import MoviesGridSkeletons from "./_components/MoviesGridSkeletons";
-import { isAuthenticated } from "@/api/apiClient";
+import SortSelect from "./_components/SortSelect";
 
 export const categories: {
   title: string;
@@ -51,14 +51,21 @@ const MoviesPage = () => {
 
   const currentGenreFilter = searchParams.get("genres") || "";
 
-  const { data, isLoading, error } = useMovies(
-    currentSortFilter,
-    currentGenreFilter
-  );
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteMovies(currentSortFilter, currentGenreFilter);
 
   const { data: userSettings } = isAuthenticated()
     ? useUserSettings()
     : { data: [] };
+
+  // Flatten the movies array from the infinite pages:
+  const movies = data?.pages.flatMap((page) => page.results) || [];
 
   return (
     <div className="flex flex-col items-start p-6 w-full">
@@ -76,7 +83,13 @@ const MoviesPage = () => {
             </div>
           )}
           {!isLoading && !error && (
-            <MoviesGrid movies={data?.results} userSettings={userSettings} />
+            <MoviesGrid
+              movies={movies}
+              userSettings={userSettings}
+              fetchNextPage={fetchNextPage}
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+            />
           )}
         </div>
       </div>

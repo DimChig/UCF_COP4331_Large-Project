@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import axios, { AxiosRequestConfig } from "axios";
 import { getAuthHeader, getAuthToken } from "@/api/apiClient";
 
@@ -46,6 +46,32 @@ export const useMovies = (sortBy: string, genres: string) =>
       return axiosInstance
         .get<FetchResponseMovies>("/api/movies", config)
         .then((res) => res.data);
+    },
+    retry: 2,
+  });
+
+export const useInfiniteMovies = (sortBy: string, genres: string) =>
+  useInfiniteQuery<FetchResponseMovies>({
+    queryKey: ["movies", sortBy, genres],
+    queryFn: ({ pageParam = 1 }) => {
+      // Build the query parameters with the page argument
+      const config = {
+        params: { sortBy, genres, page: pageParam },
+      };
+
+      return axiosInstance
+        .get<FetchResponseMovies>("/api/movies", config)
+        .then((res) => res.data);
+    },
+    initialPageParam: 1,
+
+    getNextPageParam: (lastPage, pages) => {
+      // Assuming your API returns total_pages,
+      // determine if there is another page to fetch.
+      if (pages.length < lastPage.total_pages) {
+        return pages.length + 1;
+      }
+      return undefined;
     },
     retry: 2,
   });
