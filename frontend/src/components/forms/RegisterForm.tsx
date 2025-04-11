@@ -90,8 +90,8 @@ const RegisterForm = () => {
         description: `Welcome, ${responseBody.firstName}!`,
       });
 
-      // Route to home page
-      navigate("/");
+      // Route to login page
+      navigate("/login");
     } catch (error: any) {
       // Ensure that we capture any thrown error message as a string
       setErrorMessage(error?.message || String(error));
@@ -164,9 +164,8 @@ const RegisterForm = () => {
           <Button type="submit" className="w-full">
             Register
           </Button>
-          <Link to="/">
-            Already have an account?{" "}
-            <span className="text-blue-500 hover:underline">Sign in</span>
+          <Link to="/login">
+            Already have an account? <span className="text-blue-500 hover:underline">Sign in</span>
           </Link>
         </div>
       </form>
