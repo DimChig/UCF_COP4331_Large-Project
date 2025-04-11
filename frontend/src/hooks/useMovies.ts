@@ -63,7 +63,7 @@ export const useMoviesSearch = (query: string) =>
 
       // Pass the config object as the second argument to axiosInstance.get
       return axiosInstance
-        .get<FetchResponseMovies>("/api/movies", config)
+        .get<FetchResponseMovies>("/api/movies/search", config)
         .then((res) => res.data);
     },
     retry: 2,

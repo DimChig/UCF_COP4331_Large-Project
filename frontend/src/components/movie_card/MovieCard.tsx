@@ -43,6 +43,7 @@ const getRatingBadgeColor = (rating: number): string => {
 const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
   const navigate = useNavigate();
   const rating = movie.vote_average;
+  console.log("rating = " + rating);
 
   return (
     <Card className="w-full shadow-md p-0 overflow-hidden gap-4">
