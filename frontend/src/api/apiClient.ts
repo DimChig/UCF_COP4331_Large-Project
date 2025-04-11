@@ -11,7 +11,7 @@ export function getAuthToken(): string | null {
 }
 
 // Check if the user is logged in (by checking that a token exists)
-export function isLoggedIn(): boolean {
+export function isAuthenticated(): boolean {
   return Boolean(getAuthToken());
 }
 
