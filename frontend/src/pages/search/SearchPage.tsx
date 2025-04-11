@@ -1,8 +1,8 @@
-import { useSearchParams } from "react-router-dom";
-import MoviesGridSkeletons from "../movies/_components/MoviesGridSkeletons";
 import { isAuthenticated } from "@/api/apiClient";
-import { useMoviesSearch, useUserSettings } from "@/hooks/useMovies";
+import { useInfiniteMoviesSearch, useUserSettings } from "@/hooks/useMovies";
+import { useSearchParams } from "react-router-dom";
 import MoviesGrid from "../movies/_components/MoviesGrid";
+import MoviesGridSkeletons from "../movies/_components/MoviesGridSkeletons";
 
 const SearchPage = () => {
   const [searchParams, _setSearchParams] = useSearchParams();
@@ -11,11 +11,20 @@ const SearchPage = () => {
     return <div className="text-2xl p-8">No search query provided</div>;
   }
 
-  const { data, isLoading, error } = useMoviesSearch(query);
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteMoviesSearch(query);
 
   const { data: userSettings } = isAuthenticated()
     ? useUserSettings()
     : { data: [] };
+
+  const movies = data?.pages.flatMap((page) => page.results) || [];
 
   return (
     <div className="flex flex-col items-start p-6 w-full">
@@ -34,7 +43,13 @@ const SearchPage = () => {
             </div>
           )}
           {!isLoading && !error && (
-            <MoviesGrid movies={data?.results} userSettings={userSettings} />
+            <MoviesGrid
+              movies={movies}
+              userSettings={userSettings}
+              fetchNextPage={fetchNextPage}
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+            />
           )}
         </div>
       </div>

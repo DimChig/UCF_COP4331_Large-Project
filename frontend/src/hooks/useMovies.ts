@@ -95,6 +95,32 @@ export const useMoviesSearch = (query: string) =>
     retry: 2,
   });
 
+export const useInfiniteMoviesSearch = (query: string) =>
+  useInfiniteQuery<FetchResponseMovies>({
+    queryKey: ["movies", "search", query],
+    queryFn: ({ pageParam = 1 }) => {
+      const config: AxiosRequestConfig = {
+        params: {
+          query,
+          page: pageParam,
+        },
+      };
+
+      return axiosInstance
+        .get<FetchResponseMovies>("/api/movies/search", config)
+        .then((res) => res.data);
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => {
+      // Check if there is a next page based on total_pages from your API response.
+      if (pages.length < lastPage.total_pages) {
+        return pages.length + 1;
+      }
+      return undefined;
+    },
+    retry: 2,
+  });
+
 export const useUserSettings = () =>
   useQuery<UserSettings[]>({
     queryKey: ["userSettings", getAuthToken()],
