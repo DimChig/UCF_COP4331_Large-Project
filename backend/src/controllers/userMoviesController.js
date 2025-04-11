@@ -28,7 +28,7 @@ const getUserMovies = async (req, res, filter) => {
     }
 
     // Get all user settings matching the query (userId, liked/saved)
-    const userSettings = await UserSettings.find(query);
+    const userSettings = await UserSettings.find(query).sort({ updatedAt: -1 });
 
     // If no settings found for user, return empty array
     if (userSettings.length === 0) {
