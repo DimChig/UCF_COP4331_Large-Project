@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { LuSearch } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const NavBarSearchSection = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const NavBarSearchSection = () => {
     if (searchValue.trim()) {
       navigate(`/search?query=${encodeURIComponent(searchValue)}`);
     } else {
-      alert("Please enter a search term");
+      toast.error("Please enter a search term");
     }
   };
 
