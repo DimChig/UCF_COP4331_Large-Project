@@ -106,7 +106,7 @@ router.get("/api/movies/top-rated", movieController.getTopRated);
 router.get("/api/movies/upcoming", movieController.getUpcoming);
 
 // GET /api/movies/searchMovies
-router.get("/api/movies/searchmovies", movieController.searchMovies);
+router.get("/api/movies/search", movieController.searchMovies);
 
 // GET /api/movies/:id
 router.get("/api/movies/:movieId", movieController.getMovieById);
