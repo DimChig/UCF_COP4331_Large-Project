@@ -14,7 +14,6 @@ const handleMovieRequest = async (req, res, apiCall, extraSchema = null) => {
   try {
     // Use default values (provided as fallback during destructuring)
     const { page: pageParam = 1, limit: limitParam = 20 } = req.query;
-    console.log(req.query);
 
     // Validate the common parameters
     const baseValidation = baseMoviesSchema.safeParse({

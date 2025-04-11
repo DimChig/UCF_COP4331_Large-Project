@@ -82,3 +82,25 @@ exports.getLikedMovies = async (req, res) => {
 exports.getSavedMovies = async (req, res) => {
   return getUserMovies(req, res, "saved");
 };
+
+exports.getMoviesRaw = async (req, res) => {
+  try {
+    // Get user ID from JWT middleware
+    if (!req.user)
+      return res.status(404).json({
+        error: "User not found",
+      });
+
+    const userId = req.user._id;
+
+    // Get all user settings matching the query (userId, liked/saved)
+    const userSettings = await UserSettings.find({ userId: userId }).select(
+      "movieId isLiked isSaved rating"
+    );
+
+    return res.status(200).json(userSettings);
+  } catch (err) {
+    console.error("Error getting user movies:", err);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};

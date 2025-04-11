@@ -67,6 +67,7 @@ router.get(
   jwtMiddleware,
   userMoviesController.getSavedMovies
 );
+router.get("/api/movies/raw", jwtMiddleware, userMoviesController.getMoviesRaw);
 
 // POST comment
 router.post(
