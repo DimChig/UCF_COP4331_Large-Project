@@ -12,6 +12,7 @@ export interface MovieData {
   overview: string;
   popularity: string;
   poster_path: string;
+  backdrop_path: string;
   release_date: string;
   vote_average: number;
   vote_count: number;
@@ -50,9 +51,7 @@ export const useInfiniteMovies = (sortBy: string, genres: string) =>
         params: { sortBy, genres, page: pageParam },
       };
 
-      return axiosInstance
-        .get<FetchResponseMovies>("/api/movies", config)
-        .then((res) => res.data);
+      return axiosInstance.get<FetchResponseMovies>("/api/movies", config).then((res) => res.data);
     },
     initialPageParam: 1,
 
@@ -109,10 +108,7 @@ export const useMoviesProfile = (endpoint: string) =>
 
       // Pass the config object as the second argument to axiosInstance.get
       return axiosInstance
-        .get<FetchResponseMoviesWithUserSettings>(
-          `/api/movies/${endpoint}`,
-          config
-        )
+        .get<FetchResponseMoviesWithUserSettings>(`/api/movies/${endpoint}`, config)
         .then((res) => res.data);
     },
     retry: 2,
@@ -130,9 +126,7 @@ export const useUserSettings = () =>
       };
 
       // Pass the config object as the second argument to axiosInstance.get
-      return axiosInstance
-        .get<UserSettings[]>("/api/movies/raw", config)
-        .then((res) => res.data);
+      return axiosInstance.get<UserSettings[]>("/api/movies/raw", config).then((res) => res.data);
     },
     staleTime: 0,
     retry: 2,
