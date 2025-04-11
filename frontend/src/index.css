@@ -37,8 +37,11 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  --navbar-background: #032541;
+  /* --navbar-background: #032541; */
+  --navbar-background: #000000;
   --navbar-foreground: #fff;
+  --ucf-light: #ffc804;
+  --ucf-dark: #b99a37;
 }
 
 @theme inline {
@@ -80,6 +83,9 @@
 
   --color-navbar-background: var(--navbar-background);
   --color-navbar-foreground: var(--navbar-foreground);
+  --color-navbar-foreground: var(--navbar-foreground);
+  --color-ucf-light: var(--ucf-light);
+  --color-ucf-dark: var(--ucf-dark);
 }
 
 @layer base {
