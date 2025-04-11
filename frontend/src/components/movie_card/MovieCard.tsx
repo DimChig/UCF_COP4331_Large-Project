@@ -45,7 +45,7 @@ const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
   const rating = movie.vote_average;
 
   return (
-    <Card className="w-full shadow-md p-0 overflow-hidden gap-4">
+    <Card className="w-full min-w-[200px] shadow-md p-0 overflow-hidden gap-4">
       {/* Movie Poster */}
       <div className="relative w-full">
         <Skeleton className="w-full aspect-[2/3]" />
@@ -80,12 +80,15 @@ const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
       </div>
 
       {/* Header with title and release date */}
-      <CardHeader className="px-3 pb-4">
-        <CardTitle className="text-md font-bold">{movie.title}</CardTitle>
+      <CardHeader className="px-3 pb-4 w-full">
+        <CardTitle className="text-md font-bold truncate">
+          {movie.title}
+        </CardTitle>
         <CardDescription className="flex justify-between">
           <div>{formatReleaseDate(movie.release_date)}</div>
           <Badge className={getRatingBadgeColor(rating)}>
-            {rating.toFixed(1)}
+            {/* {rating.toFixed(1)} */}
+            {movie.id}
           </Badge>
         </CardDescription>
       </CardHeader>

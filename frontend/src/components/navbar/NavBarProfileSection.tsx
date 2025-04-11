@@ -38,7 +38,9 @@ const NavBarProfileSection = () => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <Link to={"/profile"}>
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+          </Link>
 
           <DropdownMenuItem
             onClick={() => {

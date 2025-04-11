@@ -30,6 +30,12 @@ interface FetchResponseMovies {
   total_results: number;
 }
 
+interface FetchResponseMoviesWithUserSettings {
+  results: { movie_data: MovieData; isLiked: boolean; isSaved: boolean }[];
+  total_pages: number;
+  total_results: number;
+}
+
 export const useMovies = (sortBy: string, genres: string) =>
   useQuery<FetchResponseMovies>({
     queryKey: ["movies", sortBy, genres],
@@ -117,6 +123,31 @@ export const useInfiniteMoviesSearch = (query: string) =>
         return pages.length + 1;
       }
       return undefined;
+    },
+    retry: 2,
+  });
+
+export const useMoviesProfile = (endpoint: string) =>
+  useQuery<FetchResponseMoviesWithUserSettings>({
+    queryKey: ["movies", endpoint],
+    queryFn: () => {
+      // Build the axios config to pass query parameters.
+      const config: AxiosRequestConfig = {
+        params: {
+          endpoint,
+        },
+        headers: {
+          Authorization: getAuthHeader(),
+        },
+      };
+
+      // Pass the config object as the second argument to axiosInstance.get
+      return axiosInstance
+        .get<FetchResponseMoviesWithUserSettings>(
+          `/api/movies/${endpoint}`,
+          config
+        )
+        .then((res) => res.data);
     },
     retry: 2,
   });
