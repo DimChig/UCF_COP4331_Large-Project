@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { FaHeart, FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from "react-icons/fa";
 import ErrorPage from "../../error/ErrorPage";
 import { isAuthenticated } from "@/api/apiClient";
 import { useUserSettings } from "@/hooks/useMovies";
@@ -10,12 +10,14 @@ import { Button } from "@/components/ui/button";
 
 const CardDetailsPage = () => {
   const { data: userSettings } = isAuthenticated() ? useUserSettings() : { data: [] };
-  const { cardId } = useParams() ?? { cardId: "0" };
+  const movieId = Number(useParams().cardId) || -1;
 
-  if (!cardId) {
-    console.error("Failed to load cardId.", cardId);
+  if (movieId < 0) {
+    console.error("Failed to load cardId.", movieId);
     return <ErrorPage />;
   }
+
+  const movieUserSettings = userSettings?.find((movie) => movie.movieId === movieId);
 
   const { data, isLoading, error } = /*useInfiniteMoviesSearch(cardId) */ {
     data: {
@@ -72,12 +74,26 @@ const CardDetailsPage = () => {
           </div>
           <div className="flex flex-col gap-2">
             <Button>
-              <FaBookmark className="text-white" />
-              Save to watchlist
+              {movieUserSettings?.isLiked ? (
+                <>
+                  <FaHeart className="text-rose-500" /> Unlike
+                </>
+              ) : (
+                <>
+                  <FaRegHeart className="text-white" /> Like
+                </>
+              )}
             </Button>
             <Button>
-              <FaHeart className="text-white" />
-              Like
+              {movieUserSettings?.isSaved ? (
+                <>
+                  <FaBookmark className="text-yellow-400" /> Unsave
+                </>
+              ) : (
+                <>
+                  <FaRegBookmark className="text-white" /> Save
+                </>
+              )}
             </Button>
           </div>
         </div>
