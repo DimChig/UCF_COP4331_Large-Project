@@ -88,7 +88,6 @@ const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
           <Badge className={getRatingBadgeColor(rating)}>
             {rating.toFixed(1)}
           </Badge>
-          <div>{movie.id}</div>
         </CardDescription>
       </CardHeader>
     </Card>

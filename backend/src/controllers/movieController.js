@@ -39,8 +39,20 @@ const handleMovieRequest = async (req, res, apiCall, extraSchema = null) => {
     // Call the provided API function with the validated parameters.
     const response = await apiCall(validatedData);
 
+    const movies = response.results.filter(
+      (movie) =>
+        movie.id != null &&
+        movie.title != null &&
+        movie.overview != null &&
+        movie.popularity != null &&
+        movie.poster_path != null &&
+        movie.release_date != null &&
+        movie.vote_average != null &&
+        movie.vote_count != null
+    );
+
     // Limit results to the validated limit.
-    const results = response.results.slice(0, validatedData.limit);
+    const results = movies.slice(0, validatedData.limit);
 
     // Generate return json
     return res.status(200).json({
