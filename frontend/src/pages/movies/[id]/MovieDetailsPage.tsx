@@ -5,7 +5,7 @@ import { AlertCircle } from "lucide-react";
 import { useParams } from "react-router-dom";
 import MovieDetailsContainer from "./_components/MovieDetailsContainer";
 import { isAuthenticated } from "@/api/apiClient";
-import MovieDetailsContainerSkeleton from "./_components/MovieDetailsContainerSkeleton";
+import MovieDetailsContainerSkeleton from "./_components/skeletons/MovieDetailsContainerSkeleton";
 
 const MovieDetailsPage = () => {
   const params = useParams();
