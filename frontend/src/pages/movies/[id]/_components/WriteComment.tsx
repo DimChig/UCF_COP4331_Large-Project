@@ -27,27 +27,25 @@ const WriteComment = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {};
 
   return (
-    <Card>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="text"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Write a comment</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="Enter your comment here." {...field} />
-                </FormControl>
-                <FormDescription>
-                  If you gave this movie a rating, it will be included at the end of your review.
-                </FormDescription>
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
-    </Card>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="text"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Write a comment</FormLabel>
+              <FormControl>
+                <Textarea placeholder="Enter your comment here." {...field} />
+              </FormControl>
+              <FormDescription>
+                If you gave this movie a rating, it will be included at the end of your comment.
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
   );
 };
 
