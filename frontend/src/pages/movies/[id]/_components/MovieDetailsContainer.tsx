@@ -6,6 +6,7 @@ import AuthDialog from "./AuthDialog";
 import CommentsSection from "./CommentsSection";
 import MovieCast from "./MovieCast";
 import MovieInfoBanner from "./MovieInfoBanner";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   movieId: number;
@@ -28,6 +29,9 @@ const MovieDetailsContainer = ({
   const [isSaved, setIsSaved] = useState(userSetting?.isSaved || false);
 
   const [authDialogOpened, setAuthDialogOpened] = useState(false);
+
+  // Get the queryClient instance
+  const queryClient = useQueryClient();
 
   const onLiked = () => {
     if (isLiked) {
@@ -97,6 +101,9 @@ const MovieDetailsContainer = ({
       }
 
       callback();
+
+      // Invalidate queries with the key "userSettings" so that any components using them will refetch.
+      queryClient.invalidateQueries({ queryKey: ["userSettings"] });
     } catch (error) {
       toast.error("Error liking movie:", { description: String(error) });
     }

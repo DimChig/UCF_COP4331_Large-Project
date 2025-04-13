@@ -26,8 +26,14 @@ function formatRuntime(runtimeInMinutes: number) {
 const BannerHeaderDescription = ({ movie }: Props) => {
   return (
     <>
-      <div className="flex gap-2 items-center">
-        <h1 className="text-white text-4xl font-extrabold">{movie.title}</h1>
+      <div className="flex gap-2 items-center w-full">
+        {movie.title.length < 40 ? (
+          <h1 className="text-white text-4xl font-extrabold">{movie.title}</h1>
+        ) : (
+          <h1 className="text-white text-3xl font-extrabold truncate max-w-[95%] pb-2">
+            {movie.title}
+          </h1>
+        )}
         <div className="text-white opacity-50 text-3xl">{`(${
           movie.release_date ? String(movie.release_date).split("-")[0] : "2000"
         })`}</div>
