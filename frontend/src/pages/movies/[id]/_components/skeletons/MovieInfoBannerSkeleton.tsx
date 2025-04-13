@@ -17,13 +17,13 @@ const MovieInfoBannerSkeleton = () => {
           <div className="flex flex-col flex-1 gap-5">
             {/* Header Title and Description Skeleton */}
             <div className="flex flex-col gap-2">
-              <Skeleton className="h-8 w-3/4 rounded mt-1" />
-              <Skeleton className="h-4 w-1/2 rounded" />
+              <Skeleton className="h-8 w-3/4 mt-1" />
+              <Skeleton className="h-4 w-1/2" />
             </div>
 
             {/* Average Rating Skeleton */}
             <div className="flex items-center gap-2">
-              <Skeleton className="h-6 w-32 rounded" />
+              <Skeleton className="h-6 w-32" />
               <Skeleton className="h-6 w-10 rounded-full" />
             </div>
 
@@ -36,19 +36,19 @@ const MovieInfoBannerSkeleton = () => {
 
             {/* Tagline & Overview Skeleton */}
             <div className="flex flex-col gap-2 mt-1">
-              <Skeleton className="h-4 w-1/2 rounded" />
-              <Skeleton className="h-6 w-1/3 rounded" />
-              <Skeleton className="h-4 w-full rounded" />
-              <Skeleton className="h-4 w-full rounded" />
-              <Skeleton className="h-4 w-5/6 rounded" />
+              <Skeleton className="h-4 w-1/5" />
+              <Skeleton className="h-6 w-[89px]" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
             </div>
 
             {/* Crew Members Skeleton */}
             <div className="grid grid-cols-3 gap-10 mt-4 mb-3">
               {[1, 2, 3, 4, 5, 6].map((n) => (
                 <div className="flex flex-col gap-2" key={n}>
-                  <Skeleton className="h-4 w-20 rounded" />
-                  <Skeleton className="h-3 w-16 rounded" />
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-3 w-16" />
                 </div>
               ))}
             </div>

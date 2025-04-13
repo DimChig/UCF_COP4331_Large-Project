@@ -1,4 +1,5 @@
 import { MovieData } from "@/hooks/useMovies";
+import React from "react";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -39,7 +40,7 @@ const BannerHeaderDescription = ({ movie }: Props) => {
             <div className="flex">
               {movie.genres.map((genre, index) => {
                 return (
-                  <>
+                  <React.Fragment key={genre.id}>
                     <Link
                       to={`/movies?sortBy=popularity.desc&genres=${genre.id}`}
                       className="hover:underline"
@@ -49,7 +50,7 @@ const BannerHeaderDescription = ({ movie }: Props) => {
                     {index < movie.genres!.length - 1 && (
                       <div className="mr-1">,</div>
                     )}
-                  </>
+                  </React.Fragment>
                 );
               })}
             </div>

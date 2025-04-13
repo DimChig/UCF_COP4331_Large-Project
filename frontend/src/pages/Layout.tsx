@@ -11,6 +11,7 @@ const Layout = () => {
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTo(0, 0);
+      window.scrollTo(0, 0);
     }
   }, [pathname]);
 
