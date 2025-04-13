@@ -10,6 +10,7 @@ export interface MovieData {
   id: number;
   title: string;
   overview: string;
+  tagline: string;
   popularity: string;
   poster_path: string;
   backdrop_path: string;
@@ -108,6 +109,42 @@ export const useMovies = (endpoint: string) =>
       // Pass the config object as the second argument to axiosInstance.get
       return axiosInstance
         .get<FetchResponseMovies>(`/api/movies/${endpoint}`, config)
+        .then((res) => res.data);
+    },
+    retry: 2,
+  });
+
+export interface MoviePayload {
+  movie_data: MovieData;
+  crew: {
+    id: number;
+    name: string;
+    department: string;
+    job: string;
+    profile_path: string;
+  }[];
+  cast: {
+    id: number;
+    name: string;
+    profile_path: string;
+    character: string;
+  }[];
+  images: {
+    file_path: string;
+  }[];
+  similar: MovieData[];
+}
+
+export const useMovie = (movieId: number) =>
+  useQuery<MoviePayload>({
+    queryKey: ["movies", movieId],
+    queryFn: () => {
+      // Build the axios config to pass query parameters.
+      const config: AxiosRequestConfig = {};
+
+      // Pass the config object as the second argument to axiosInstance.get
+      return axiosInstance
+        .get<MoviePayload>(`/api/movies/${movieId}`, config)
         .then((res) => res.data);
     },
     retry: 2,

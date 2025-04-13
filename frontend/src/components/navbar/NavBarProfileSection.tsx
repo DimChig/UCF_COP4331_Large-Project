@@ -24,7 +24,7 @@ const NavBarProfileSection = () => {
       </Link>
     );
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Avatar className="w-8 h-8">
           <AvatarImage

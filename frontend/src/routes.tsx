@@ -4,9 +4,10 @@ import ErrorPage from "./pages/error/ErrorPage";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/login/LoginPage";
 import MoviesPage from "./pages/movies/MoviesPage";
+import MovieDetailsPage from "./pages/movies/[id]/MovieDetailsPage";
+import ProfilePage from "./pages/profile/ProfilePage";
 import RegisterPage from "./pages/register/RegisterPage";
 import SearchPage from "./pages/search/SearchPage";
-import ProfilePage from "./pages/profile/ProfilePage";
 import CardDetailsPage from "./pages/cards/[cardId]/CardDetailsPage";
 
 const router = createBrowserRouter([
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "movies/:cardId",
         element: <CardDetailsPage />,
+      },
+      {
+        path: "movies2/:movieId",
+        element: <MovieDetailsPage />,
       },
     ],
     errorElement: <ErrorPage />,
