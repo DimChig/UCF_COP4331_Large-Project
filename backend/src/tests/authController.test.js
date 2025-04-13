@@ -1,12 +1,12 @@
 // test/controllers/authController.test.js
-const authController = require('../../controllers/authController');
-const User = require('../../models/User');
+const authController = require('../controllers/authController');
+const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { registerSchema, loginSchema } = require('../../validations/authValidation');
+const { registerSchema, loginSchema } = require('../validations/authValidation');
 
 // Mocks
-jest.mock('../../models/User');
+jest.mock('../models/User');
 jest.mock('bcrypt');
 jest.mock('jsonwebtoken');
 
