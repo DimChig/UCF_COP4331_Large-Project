@@ -219,7 +219,21 @@ const getSimilarMovies = async (movieId, limit) => {
   const similar = await moviedb.movieSimilar({ id: movieId });
   if (!similar || !similar.results) return undefined;
 
-  return similar.results.slice(0, limit);
+  // sort by vote_count > 200 first
+  // then sort by popularity
+  const sortedResults = similar.results.sort((a, b) => {
+    // First prioritize movies with vote_count > 200
+    const aHasEnoughVotes = a.vote_count > 200;
+    const bHasEnoughVotes = b.vote_count > 200;
+
+    if (aHasEnoughVotes && !bHasEnoughVotes) return -1;
+    if (!aHasEnoughVotes && bHasEnoughVotes) return 1;
+
+    // Then sort by popularity
+    return b.popularity - a.popularity;
+  });
+
+  return sortedResults.slice(0, limit);
 };
 
 // Get movie details
@@ -244,7 +258,7 @@ exports.getMovieById = async (req, res) => {
 
     const images = await getImagesInfo(movieId, 5);
 
-    const similar = await getSimilarMovies(movieId, 6);
+    const similar = await getSimilarMovies(movieId, 8);
 
     return res.status(200).json({
       movie_data: movieData,
