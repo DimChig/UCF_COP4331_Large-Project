@@ -1,16 +1,20 @@
+import { useState } from "react";
 import { toast } from "sonner";
+import PostedComments from "./PostedComments";
 import WriteComment from "./WriteComment";
-import Comment from "./Comment";
-import { type CommentData } from "@/hooks/useMovies";
-import { baseUrl, getAuthHeader, isAuthenticated } from "@/api/apiClient";
+import { useMovieComments } from "@/hooks/useComments";
+import { useQueryClient } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
+import { baseUrl, getAuthHeader, isAuthenticated } from "@/api/apiClient";
+import { CommentData } from "@/hooks/useMovies";
 
 interface Props {
-  comments: CommentData[];
   movieId: number;
 }
 
-const CommentsSection = ({ comments, movieId }: Props) => {
+const CommentsSection = ({ movieId }: Props) => {
+  const queryClient = useQueryClient();
+
   const onComment = async (commentText: string) => {
     if (!isAuthenticated()) {
       toast.error("Only authorized users can post comments.");
@@ -35,6 +39,8 @@ const CommentsSection = ({ comments, movieId }: Props) => {
           }`,
         });
       }
+
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
     } catch (error) {
       toast.error("Error posting comment:", { description: String(error) });
     }
@@ -47,13 +53,7 @@ const CommentsSection = ({ comments, movieId }: Props) => {
         <Card className="w-full md:w-4/5 p-5">
           <WriteComment onComment={onComment} />
           <hr />
-          {comments ? (
-            comments.map((comment) => <Comment data={comment} />)
-          ) : (
-            <p className="text-gray-400 text-center text-lg">
-              Its awfully empty here... Be the first one to post a coment!
-            </p>
-          )}
+          <PostedComments movieId={movieId} />
         </Card>
       </div>
     </div>
