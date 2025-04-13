@@ -1,8 +1,13 @@
 import WriteComment from "./WriteComment";
 import Comment from "./Comment";
+import { type CommentData } from "@/hooks/useMovies";
 import { Card } from "@/components/ui/card";
 
-const CommentsSection = () => {
+interface Props {
+  comments: CommentData[];
+}
+
+const CommentsSection = ({ comments }: Props) => {
   return (
     <div className="w-full px-6">
       <h2 className="text-2xl font-semibold pt-4 pb-2">Comments</h2>
@@ -10,8 +15,13 @@ const CommentsSection = () => {
         <Card className="w-full md:w-4/5 p-5">
           <WriteComment />
           <hr />
-          {/* Comments go here. */}
-          <Comment username="John Doe" comment="This movie rocks!" rating={5} />
+          {comments ? (
+            comments.map((comment) => <Comment data={comment} />)
+          ) : (
+            <p className="text-gray-400 text-center text-lg">
+              Its awfully empty here... Be the first one to post a coment!
+            </p>
+          )}
         </Card>
       </div>
     </div>

@@ -117,7 +117,7 @@ const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) =>
       <div className="flex flex-col py-8 px-4">
         <MovieCast moviePayload={moviePayload} />
       </div>
-      <CommentsSection />
+      <CommentsSection comments={moviePayload.comments} />
     </div>
   );
 };
