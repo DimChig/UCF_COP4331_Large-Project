@@ -40,13 +40,21 @@ const MovieInfoBanner = ({ moviePayload, userSetting }: Props) => {
             />
           </div>
           <div className="flex flex-col">
-            <h1 className="text-white text-4xl font-extrabold mb-1">
-              {movie.title}
-              <span className="text-white opacity-50 text-3xl font-semibold">
-                {` (${movie.release_date})`}
-              </span>
-            </h1>
-            <p className="text-white">{movie.overview}</p>
+            <div className="flex gap-2 items-center">
+              <h1 className="text-white text-4xl font-extrabold mb-1">
+                {movie.title}
+              </h1>
+              <div className="text-white opacity-50 text-3xl">{`(${
+                movie.release_date
+                  ? String(movie.release_date).split("-")[0]
+                  : "2000"
+              })`}</div>
+            </div>
+            <div className="flex gap-2 text-white opacity-85">
+              <div>{movie.release_date}</div>
+              <div>•</div>
+              <div>Todo</div>
+            </div>
             <div className="flex flex-col gap-5 mt-3">
               <div className="flex  ">
                 <span className="text-white inline-block font-semibold text-lg mr-2 align-top">
