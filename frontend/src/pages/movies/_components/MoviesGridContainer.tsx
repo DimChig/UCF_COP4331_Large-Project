@@ -1,4 +1,3 @@
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ReactNode } from "react";
 import FadeScrollArea from "./FadeScrollArea";
 
@@ -15,12 +14,6 @@ const MoviesGridContainer = ({ children, isGrid = true }: Props) => {
       </div>
     );
   return <FadeScrollArea>{children}</FadeScrollArea>;
-  return (
-    <ScrollArea className="w-full whitespace-nowrap">
-      <div className="flex w-full pb-6 gap-4 h-fit">{children}</div>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
-  );
 };
 
 export default MoviesGridContainer;
