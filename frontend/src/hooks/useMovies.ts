@@ -10,6 +10,7 @@ export interface MovieData {
   id: number;
   title: string;
   overview: string;
+  tagline: string;
   popularity: string;
   poster_path: string;
   backdrop_path: string;
