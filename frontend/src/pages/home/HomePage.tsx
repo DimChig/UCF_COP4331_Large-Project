@@ -7,7 +7,10 @@ const HomePage = () => {
       <HomeSearchSection />
       <div className="flex flex-col gap-4 p-8">
         <MoviesHorizontalSection label="What's Popular" endpoint="popular" />
-        <MoviesHorizontalSection label="Top rated" endpoint="top-rated" />
+        <MoviesHorizontalSection
+          label="Top Rated Movies"
+          endpoint="top-rated"
+        />
         <MoviesHorizontalSection label="Upcoming Movies" endpoint="upcoming" />
       </div>
     </div>

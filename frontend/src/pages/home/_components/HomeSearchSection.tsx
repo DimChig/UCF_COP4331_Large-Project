@@ -1,7 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const HomeSearchSection = () => {
+  const navigate = useNavigate();
+  const [searchValue, setSearchValue] = useState<string>("");
+
+  const handleSearch = () => {
+    if (searchValue.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchValue)}`);
+    } else {
+      toast.error("Please enter a search term");
+    }
+  };
+
+  // Handle the key down event to trigger search when Enter is pressed.
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="relative flex flex-col w-full gap-8 p-16 text-white z-1">
       {/* Background Image */}
@@ -16,15 +37,23 @@ const HomeSearchSection = () => {
       <div className="flex flex-col gap-1">
         <div className="text-4xl font-bold">Welcome!</div>
         <div className="text-2xl font-semibold">
-          Millions of movies, TV shows and people to discover. Explore now.
+          Group 22 presents a world of films, TV shows, and captivating
+          personalities.
         </div>
       </div>
       <div className="flex w-full relative">
         <Input
-          placeholder="Search any movie title..."
+          placeholder="Search for a movie title..."
           className="bg-white rounded-full h-12 text-black pe-20"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
-        <Button className="w-fit h-full rounded-full absolute right-0 bg-gradient-to-r from-ucf-dark to-ucf-light cursor-pointer">
+        <Button
+          className="w-fit h-full rounded-full absolute right-0 bg-gradient-to-r from-ucf-dark to-ucf-light cursor-pointer"
+          type="button"
+          onClick={handleSearch}
+        >
           Search
         </Button>
       </div>
