@@ -1,15 +1,15 @@
 import MovieCard from "@/components/movie_card/MovieCard";
-import { useMoviesProfile } from "@/hooks/useMovies";
-import MoviesGridContainer from "../movies/_components/MoviesGridContainer";
-import MoviesGridSkeletons from "../movies/_components/MoviesGridSkeletons";
+import { useMovies } from "@/hooks/useMovies";
+import MoviesGridContainer from "@/pages/movies/_components/MoviesGridContainer";
+import MoviesGridSkeletons from "@/pages/movies/_components/MoviesGridSkeletons";
 
 interface Props {
   label: string;
   endpoint: string;
 }
 
-const ProfilePageSection = ({ label, endpoint }: Props) => {
-  const { data: movies, isLoading, error } = useMoviesProfile(endpoint);
+const MoviesHorizontalSection = ({ label, endpoint }: Props) => {
+  const { data: movies, isLoading, error } = useMovies(endpoint);
   return (
     <div className="flex flex-col w-full">
       <div className="flex gap-2">
@@ -46,4 +46,4 @@ const ProfilePageSection = ({ label, endpoint }: Props) => {
   );
 };
 
-export default ProfilePageSection;
+export default MoviesHorizontalSection;

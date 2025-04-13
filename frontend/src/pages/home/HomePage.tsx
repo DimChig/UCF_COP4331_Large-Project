@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import HomeSearchSection from "./_components/HomeSearchSection";
+import MoviesHorizontalSection from "./_components/MoviesHorizontalSection";
 
 const HomePage = () => {
   return (
-    <div className="p-4 text-3xl">
-      HomePage. Go to <Link to="/movies">/movies</Link>
+    <div className="flex flex-col w-full">
+      <HomeSearchSection />
+      <MoviesHorizontalSection label="Trending" endpoint="trending" />
     </div>
   );
 };
