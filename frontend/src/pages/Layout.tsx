@@ -1,12 +1,21 @@
 import Footer from "@/components/footer/Footer";
 import NavBar from "@/components/navbar/NavBar";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { useEffect, useRef } from "react";
 
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const Layout = () => {
+  const { pathname } = useLocation();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo(0, 0);
+    }
+  }, [pathname]);
+
   return (
-    <ScrollArea className="h-screen">
+    <div ref={containerRef} className="overflow-y-auto">
       <div className="flex flex-col w-full h-full bg-[red]">
         <NavBar />
         <div className="flex h-full min-h-screen w-full justify-center bg-neutral-100 ">
@@ -16,7 +25,7 @@ const Layout = () => {
         </div>
         <Footer />
       </div>
-    </ScrollArea>
+    </div>
   );
 };
 

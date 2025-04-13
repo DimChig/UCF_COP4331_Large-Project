@@ -16,7 +16,7 @@ interface Props {
 
 const NavBarSelectDropdown = ({ title, items }: Props) => {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <div className="mx-auto font-medium cursor-pointer text-lg whitespace-nowrap">
           {title}
