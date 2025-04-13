@@ -5,7 +5,7 @@ const HomePage = () => {
   return (
     <div className="flex flex-col w-full">
       <HomeSearchSection />
-      <div className="flex flex-col gap-4 p-8">
+      <div className="flex flex-col gap-4 p-8 w-full">
         <MoviesHorizontalSection label="What's Popular" endpoint="popular" />
         <MoviesHorizontalSection
           label="Top Rated Movies"

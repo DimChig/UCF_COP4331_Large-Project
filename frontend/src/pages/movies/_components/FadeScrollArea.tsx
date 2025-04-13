@@ -28,11 +28,11 @@ export default function FadeScrollArea({
   return (
     <div className="relative w-full">
       <ScrollArea
-        className="w-full whitespace-nowrap"
+        className="w-full max-w-full whitespace-nowrap"
         onMouseMove={handleScroll}
         type="always"
       >
-        <div className="flex w-full pb-6 gap-4 h-fit">{children}</div>
+        <div className="flex flex-nowrap pb-6 gap-4 h-fit">{children}</div>
         <ScrollBar ref={scrollRef} orientation="horizontal" />
       </ScrollArea>
       <div
