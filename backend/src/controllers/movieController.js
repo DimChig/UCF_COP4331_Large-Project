@@ -113,7 +113,16 @@ exports.getNowPlaying = async (req, res) => {
 // get Top Rated
 exports.getTopRated = async (req, res) => {
   await handleMovieRequest(req, res, (data) => {
-    return moviedb.movieTopRated({ page: data.page });
+    return moviedb.discoverMovie({
+      page: data.page,
+      language: "en-US",
+      include_adult: false,
+      include_video: false,
+      without_genres: "99,10755",
+      sort_by: "vote_average.desc",
+      "vote_count.gte": 25000,
+      "primary_release_date.gte": "2000-01-01",
+    });
   });
 };
 
@@ -122,6 +131,7 @@ exports.getUpcoming = async (req, res) => {
   await handleMovieRequest(req, res, (data) => {
     return moviedb.discoverMovie({
       page: data.page,
+      language: "en-US",
       include_adult: false,
       include_video: false,
       without_genres: "99,10755",
