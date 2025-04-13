@@ -1,13 +1,14 @@
 // src/tests/commentsController.test.js
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { movieIdSchema } from '../validations/movieValidation';
-import { commentSchema } from '../validations/commentValidation';
-import { objectIdSchema } from '../validations/objectIdValidation';
+
+// Import the validation schemas from your project
+const { movieIdSchema } = require("../validations/movieValidation");
+const { commentSchema } = require("../validations/commentValidation");
+const { objectIdSchema } = require("../validations/objectIdValidation");
 
 // Mock the Comment model
 const mockComment = {
-  create: vi.fn(),
-  findOneAndDelete: vi.fn()
+  create: jest.fn(),
+  findOneAndDelete: jest.fn(),
 };
 
 // Create test versions of the controller functions
@@ -92,14 +93,14 @@ const createDeleteCommentTest = (mockCommentModel) => {
   };
 };
 
-describe('Comments Controller', () => {
+describe("Comments Controller", () => {
   let req, res, postCommentTest, deleteCommentTest;
 
   beforeEach(() => {
     // Reset mocks
-    vi.clearAllMocks();
+    jest.clearAllMocks();
 
-    // Create test functions with mock model
+    // Create test functions with the mock model
     postCommentTest = createPostCommentTest(mockComment);
     deleteCommentTest = createDeleteCommentTest(mockComment);
 
@@ -108,21 +109,20 @@ describe('Comments Controller', () => {
       params: {},
       body: {},
       user: {
-        _id: '6507aca13ababc1234567890' // Mock user ID
-      }
+        _id: "6507aca13ababc1234567890", // Mock user ID
+      },
     };
 
     res = {
-      status: vi.fn().mockReturnThis(),
-      json: vi.fn()
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
     };
   });
 
-  describe('postComment', () => {
-    it('should return 400 error for invalid movieId', async () => {
-      
-      req.params.movieId = 'asiufh@#$#@$324'; // Invalid movie ID
-      req.body.text = 'This is a valid comment';
+  describe("postComment", () => {
+    it("should return 400 error for invalid movieId", async () => {
+      req.params.movieId = "asiufh@#$#@$324"; // Invalid movie ID
+      req.body.text = "This is a valid comment";
 
       await postCommentTest(req, res);
 
@@ -131,9 +131,9 @@ describe('Comments Controller', () => {
       expect(mockComment.create).not.toHaveBeenCalled();
     });
 
-    it('should return 400 error for invalid comment text', async () => {
-      req.params.movieId = '12345';
-      req.body.text = ''; // Empty comment
+    it("should return 400 error for invalid comment text", async () => {
+      req.params.movieId = "12345";
+      req.body.text = ""; // Empty comment
 
       await postCommentTest(req, res);
 
@@ -142,16 +142,16 @@ describe('Comments Controller', () => {
       expect(mockComment.create).not.toHaveBeenCalled();
     });
 
-    it('should create a comment and return 201 status for valid input', async () => {
-      req.params.movieId = '12345'; // numeric
-      req.body.text = 'This is a valid comment'; // non-blank comment
+    it("should create a comment and return 201 status for valid input", async () => {
+      req.params.movieId = "12345"; // numeric
+      req.body.text = "This is a valid comment"; // non-blank comment
 
       const mockCreatedComment = {
-        _id: '6507aca13ababc0987654321',
+        _id: "6507aca13ababc0987654321",
         userId: req.user._id,
         movieId: 12345,
-        text: 'This is a valid comment',
-        createdAt: new Date().toISOString()
+        text: "This is a valid comment",
+        createdAt: new Date().toISOString(),
       };
 
       mockComment.create.mockResolvedValueOnce(mockCreatedComment);
@@ -161,21 +161,20 @@ describe('Comments Controller', () => {
       expect(mockComment.create).toHaveBeenCalledWith({
         userId: req.user._id,
         movieId: 12345,
-        text: 'This is a valid comment'
+        text: "This is a valid comment",
       });
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith({
-        message: 'Comment posted',
-        comment: mockCreatedComment
+        message: "Comment posted",
+        comment: mockCreatedComment,
       });
     });
   });
 
-  describe('deleteComment', () => {
-    it('should return 400 error for invalid movieId', async () => {
-
-      req.params.movieId = 'lkc@$@!ejik@#$'; // Invalid movie ID
-      req.params.commentId = '6507aca13ababc0987654321'; // Valid comment ID
+  describe("deleteComment", () => {
+    it("should return 400 error for invalid movieId", async () => {
+      req.params.movieId = "lkc@$@!ejik@#$"; // Invalid movie ID
+      req.params.commentId = "6507aca13ababc0987654321"; // Valid comment ID
 
       await deleteCommentTest(req, res);
 
@@ -184,10 +183,9 @@ describe('Comments Controller', () => {
       expect(mockComment.findOneAndDelete).not.toHaveBeenCalled();
     });
 
-    it('should return 404 error when comment is not found', async () => {
-
-      req.params.movieId = '28'; // Valid movie ID
-      req.params.commentId = '6507aca13ababc0987654321'; // Valid Comment ID
+    it("should return 404 error when comment is not found", async () => {
+      req.params.movieId = "28"; // Valid movie ID
+      req.params.commentId = "6507aca13ababc0987654321"; // Valid comment ID
 
       // Mock findOneAndDelete to return null (comment not found)
       mockComment.findOneAndDelete.mockResolvedValueOnce(null);
@@ -195,24 +193,23 @@ describe('Comments Controller', () => {
       await deleteCommentTest(req, res);
 
       expect(mockComment.findOneAndDelete).toHaveBeenCalledWith({
-        _id: '6507aca13ababc0987654321',
+        _id: "6507aca13ababc0987654321",
         movieId: 28,
-        userId: req.user._id
+        userId: req.user._id,
       });
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Comment not found' });
+      expect(res.json).toHaveBeenCalledWith({ message: "Comment not found" });
     });
 
-    it('should delete comment and return 200 status for valid request', async () => {
-
-      req.params.movieId = '28';
-      req.params.commentId = '6507aca13ababc0987654321';
+    it("should delete comment and return 200 status for valid request", async () => {
+      req.params.movieId = "28";
+      req.params.commentId = "6507aca13ababc0987654321";
 
       const mockDeletedComment = {
-        _id: '6507aca13ababc0987654321',
+        _id: "6507aca13ababc0987654321",
         userId: req.user._id,
         movieId: 28,
-        text: 'This is a comment that will be deleted'
+        text: "This is a comment that will be deleted",
       };
 
       mockComment.findOneAndDelete.mockResolvedValueOnce(mockDeletedComment);
@@ -220,12 +217,12 @@ describe('Comments Controller', () => {
       await deleteCommentTest(req, res);
 
       expect(mockComment.findOneAndDelete).toHaveBeenCalledWith({
-        _id: '6507aca13ababc0987654321',
+        _id: "6507aca13ababc0987654321",
         movieId: 28,
-        userId: req.user._id
+        userId: req.user._id,
       });
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Comment deleted' });
+      expect(res.json).toHaveBeenCalledWith({ message: "Comment deleted" });
     });
   });
 });
