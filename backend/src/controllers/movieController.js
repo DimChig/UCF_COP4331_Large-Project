@@ -153,21 +153,106 @@ exports.searchMovies = async (req, res) => {
   );
 };
 
+const getCastInfo = async (movieId, limit) => {
+  const credits = await moviedb.movieCredits({ id: movieId });
+  if (!credits || !credits.cast) return undefined;
+
+  const cast = credits.cast
+    .filter((member) => member.known_for_department === "Acting")
+    .filter((member) => !!member.character)
+    .filter(
+      (member, index, self) =>
+        self.findIndex((t) => t.id === member.id) === index
+    )
+    .slice(0, limit);
+  return cast.map((member) => {
+    return {
+      id: member.id,
+      name: member.name,
+      profile_path: member.profile_path,
+      character: member.character,
+      popularity: member.popularity,
+    };
+  });
+};
+
+const getCrewInfo = async (movieId, limit) => {
+  const credits = await moviedb.movieCredits({ id: movieId });
+  if (!credits || !credits.crew) return undefined;
+
+  const crew = credits.crew
+    .sort((a, b) => b.popularity - a.popularity)
+    .filter((member) => member.known_for_department !== "Acting")
+    .filter(
+      (member, index, self) =>
+        self.findIndex((t) => t.id === member.id) === index
+    )
+    .slice(0, limit);
+
+  return crew.map((member) => {
+    return {
+      id: member.id,
+      name: member.name,
+      department: member.department,
+      job: member.job,
+      profile_path: member.profile_path,
+    };
+  });
+};
+
+const getImagesInfo = async (movieId, limit) => {
+  const images = await moviedb.movieImages({ id: movieId });
+  if (!images || !images.backdrops) return undefined;
+
+  const backdrops = images.backdrops
+    .sort((a, b) => b.vote_average - a.vote_average)
+    .filter((limit) => !!limit.file_path)
+    .slice(0, limit);
+  return backdrops.map((image) => {
+    return {
+      file_path: image.file_path,
+    };
+  });
+};
+
+const getSimilarMovies = async (movieId, limit) => {
+  const similar = await moviedb.movieSimilar({ id: movieId });
+  if (!similar || !similar.results) return undefined;
+
+  return similar.results.slice(0, limit);
+};
+
 // Get movie details
 exports.getMovieById = async (req, res) => {
   try {
-    const { movieId } = req.params;
-
     // Validate ID
-    const validation = movieIdSchema.safeParse({ movieId: Number(movieId) });
+    const validation = movieIdSchema.safeParse({
+      movieId: Number(req.params.movieId),
+    });
     if (!validation.success) {
       return res.status(400).json(validation.error.errors);
     }
-    const validationData = validation.data;
+    const movieId = validation.data.movieId;
 
-    const movie = await moviedb.movieInfo({ id: validationData.movieId });
+    const movieData = await moviedb.movieInfo({ id: movieId });
+    if (!movieData)
+      return res.status(500).json({ error: "Movie was not found" });
 
-    return res.status(200).json(movie);
+    const crew = await getCrewInfo(movieId, 6);
+
+    const cast = await getCastInfo(movieId, 12);
+
+    const images = await getImagesInfo(movieId, 5);
+
+    const similar = await getSimilarMovies(movieId, 6);
+
+    return res.status(200).json({
+      movie_data: movieData,
+      crew: crew,
+      cast: cast,
+      images: images,
+      similar: similar,
+    });
   } catch (err) {
     console.error(err);
     if (err.response && err.response.status === 404) {
