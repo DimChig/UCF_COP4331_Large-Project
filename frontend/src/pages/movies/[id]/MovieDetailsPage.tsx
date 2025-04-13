@@ -38,7 +38,11 @@ const MovieDetailsPage = () => {
   }
 
   return (
-    <MovieDetailsContainer moviePayload={data} userSetting={userSetting} />
+    <MovieDetailsContainer
+      movieId={movieId}
+      moviePayload={data}
+      userSetting={userSetting}
+    />
   );
 };
 

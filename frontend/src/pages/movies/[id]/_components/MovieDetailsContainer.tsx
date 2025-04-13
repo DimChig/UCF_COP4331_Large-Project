@@ -1,8 +1,12 @@
 import { MoviePayload } from "@/hooks/useMovies";
 import MovieInfoBanner from "./MovieInfoBanner";
 import { useState } from "react";
+import { baseUrl, getAuthHeader, isAuthenticated } from "@/api/apiClient";
+import AuthDialog from "./AuthDialog";
+import { toast } from "sonner";
 
 interface Props {
+  movieId: number;
   moviePayload: MoviePayload;
   userSetting:
     | {
@@ -13,61 +17,96 @@ interface Props {
     | undefined;
 }
 
-const MovieDetailsContainer = ({ moviePayload, userSetting }: Props) => {
+const MovieDetailsContainer = ({
+  movieId,
+  moviePayload,
+  userSetting,
+}: Props) => {
   const [isLiked, setIsLiked] = useState(userSetting?.isLiked || false);
   const [isSaved, setIsSaved] = useState(userSetting?.isSaved || false);
   const [rating, setRating] = useState(userSetting?.rating || 0);
 
+  const [authDialogOpened, setAuthDialogOpened] = useState(false);
+
   const onLiked = () => {
-    console.log("Liked");
+    if (isLiked) {
+      handleUpdate("like", "DELETE", {}, () => {
+        setIsLiked(false);
+      });
+    } else {
+      handleUpdate("like", "POST", {}, () => {
+        toast.success("You liked this movie!");
+        setIsLiked(true);
+      });
+    }
   };
 
   const onSaved = () => {
-    console.log("Saved");
+    if (isSaved) {
+      handleUpdate("save", "DELETE", {}, () => {
+        setIsSaved(false);
+      });
+    } else {
+      handleUpdate("save", "POST", {}, () => {
+        toast.success("You saved this movie!");
+        setIsSaved(true);
+      });
+    }
   };
 
   const onRatingChanged = (newRating: number) => {
     console.log("New rating:", newRating);
   };
 
-  // const handleLike = async (): Promise<void> => {
-  //   if (!isAuthenticated()) {
-  //     toast.error("User not authenticated.");
-  //     return;
-  //   }
+  const handleUpdate = async (
+    endpoint: string,
+    method: string,
+    payload: {},
+    callback: () => void
+  ) => {
+    if (!isAuthenticated()) {
+      setAuthDialogOpened(true);
+      return;
+    }
 
-  //   try {
-  //     const response = await fetch(`${baseUrl}/api/movies/${movieId}/like`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: getAuthHeader(),
-  //       },
-  //     });
+    try {
+      const response = await fetch(
+        `${baseUrl}/api/movies/${movieId}/${endpoint}`,
+        {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getAuthHeader(),
+          },
+        }
+      );
 
-  //     if (!response.ok) {
-  //       toast.error("Failed to like the movie", {
-  //         description: `Status: ${response.status} ${response.statusText}`,
-  //       });
-  //       return;
-  //     }
+      if (!response.ok) {
+        toast.error("Failed to like the movie", {
+          description: `Status: ${response.status} ${response.statusText}`,
+        });
+        return;
+      }
 
-  //     setIsLiked(!isLiked);
-  //   } catch (error) {
-  //     toast.error("Error liking movie:", { description: String(error) });
-  //   }
-  // };
+      callback();
+    } catch (error) {
+      toast.error("Error liking movie:", { description: String(error) });
+    }
+  };
 
   return (
-    <MovieInfoBanner
-      moviePayload={moviePayload}
-      isLiked={isLiked}
-      onLiked={onLiked}
-      isSaved={isSaved}
-      onSaved={onSaved}
-      rating={rating}
-      onRatingChanged={onRatingChanged}
-    />
+    <>
+      <AuthDialog isOpened={authDialogOpened} setOpened={setAuthDialogOpened} />
+      <MovieInfoBanner
+        moviePayload={moviePayload}
+        isLiked={isLiked}
+        onLiked={onLiked}
+        isSaved={isSaved}
+        onSaved={onSaved}
+        rating={rating}
+        onRatingChanged={onRatingChanged}
+      />
+    </>
   );
 };
 
