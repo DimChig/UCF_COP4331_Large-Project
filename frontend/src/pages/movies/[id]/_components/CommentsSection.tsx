@@ -23,7 +23,7 @@ const CommentsSection = ({ comments, movieId }: Props) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Autorization: getAuthHeader(),
+          Authorization: getAuthHeader(),
         },
         body: JSON.stringify({ text: commentText }),
       });
