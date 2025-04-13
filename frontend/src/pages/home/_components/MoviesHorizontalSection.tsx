@@ -1,5 +1,6 @@
+import { isAuthenticated } from "@/api/apiClient";
 import MovieCard from "@/components/movie_card/MovieCard";
-import { useMovies } from "@/hooks/useMovies";
+import { useMovies, useUserSettings } from "@/hooks/useMovies";
 import MoviesGridContainer from "@/pages/movies/_components/MoviesGridContainer";
 import MoviesGridSkeletons from "@/pages/movies/_components/MoviesGridSkeletons";
 
@@ -10,8 +11,13 @@ interface Props {
 
 const MoviesHorizontalSection = ({ label, endpoint }: Props) => {
   const { data: movies, isLoading, error } = useMovies(endpoint);
+
+  const { data: userSettings } = isAuthenticated()
+    ? useUserSettings()
+    : { data: [] };
+
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full ">
       <div className="flex gap-2">
         <div className="text-2xl font-semibold">{label}</div>
       </div>
@@ -26,12 +32,16 @@ const MoviesHorizontalSection = ({ label, endpoint }: Props) => {
           {!isLoading && !error && (
             <MoviesGridContainer isGrid={false}>
               {movies?.results.map((movie) => {
+                const userSetting = userSettings?.find(
+                  (s) => s.movieId === movie.id
+                );
                 return (
                   <MovieCard
-                    movie={movie.movie_data}
-                    key={movie.movie_data.id}
-                    isLiked={movie.isLiked}
-                    isSaved={movie.isSaved}
+                    movie={movie}
+                    key={movie.id}
+                    isLiked={userSetting?.isLiked}
+                    isSaved={userSetting?.isSaved}
+                    className="w-[200px]"
                   />
                 );
               })}

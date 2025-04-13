@@ -32,6 +32,7 @@ const ProfilePageSection = ({ label, endpoint }: Props) => {
                     key={movie.movie_data.id}
                     isLiked={movie.isLiked}
                     isSaved={movie.isSaved}
+                    className="w-[200px]"
                   />
                 );
               })}

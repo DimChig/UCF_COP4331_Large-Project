@@ -95,12 +95,19 @@ export const useInfiniteMoviesSearch = (query: string) =>
   });
 
 export const useMovies = (endpoint: string) =>
-  useQuery<FetchResponseMoviesWithUserSettings>({
+  useQuery<FetchResponseMovies>({
     queryKey: ["movies", endpoint],
     queryFn: () => {
+      // Build the axios config to pass query parameters.
+      const config: AxiosRequestConfig = {
+        params: {
+          limit: 2,
+        },
+      };
+
       // Pass the config object as the second argument to axiosInstance.get
       return axiosInstance
-        .get<FetchResponseMoviesWithUserSettings>(`/api/movies/${endpoint}`)
+        .get<FetchResponseMovies>(`/api/movies/${endpoint}`, config)
         .then((res) => res.data);
     },
     retry: 2,

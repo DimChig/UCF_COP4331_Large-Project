@@ -5,7 +5,7 @@ const HomePage = () => {
   return (
     <div className="flex flex-col w-full">
       <HomeSearchSection />
-      <MoviesHorizontalSection label="Trending" endpoint="trending" />
+      <MoviesHorizontalSection label="What's Popular" endpoint="popular" />
     </div>
   );
 };
