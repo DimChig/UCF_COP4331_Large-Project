@@ -1,11 +1,11 @@
-import { MoviePayload } from "@/hooks/useMovies";
-import MovieInfoBanner from "./MovieInfoBanner";
-import { useState } from "react";
 import { baseUrl, getAuthHeader, isAuthenticated } from "@/api/apiClient";
-import AuthDialog from "./AuthDialog";
+import { MoviePayload } from "@/hooks/useMovies";
+import { useState } from "react";
 import { toast } from "sonner";
+import AuthDialog from "./AuthDialog";
 import CommentsSection from "./CommentsSection";
 import MovieCast from "./MovieCast";
+import MovieInfoBanner from "./MovieInfoBanner";
 
 interface Props {
   movieId: number;
@@ -19,7 +19,11 @@ interface Props {
     | undefined;
 }
 
-const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) => {
+const MovieDetailsContainer = ({
+  movieId,
+  moviePayload,
+  userSetting,
+}: Props) => {
   const [isLiked, setIsLiked] = useState(userSetting?.isLiked || false);
   const [isSaved, setIsSaved] = useState(userSetting?.isSaved || false);
 
@@ -73,14 +77,17 @@ const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) =>
     }
 
     try {
-      const response = await fetch(`${baseUrl}/api/movies/${movieId}/${endpoint}`, {
-        method: method,
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: getAuthHeader(),
-        },
-      });
+      const response = await fetch(
+        `${baseUrl}/api/movies/${movieId}/${endpoint}`,
+        {
+          method: method,
+          body: JSON.stringify(payload),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getAuthHeader(),
+          },
+        }
+      );
 
       if (!response.ok) {
         toast.error("Failed to like the movie", {
@@ -96,7 +103,7 @@ const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) =>
   };
 
   return (
-    <>
+    <div className="flex flex-col w-full">
       <AuthDialog isOpened={authDialogOpened} setOpened={setAuthDialogOpened} />
       <MovieInfoBanner
         moviePayload={moviePayload}
@@ -107,7 +114,11 @@ const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) =>
         rating={userSetting?.rating || 0}
         onRatingChanged={onRatingChanged}
       />
-    </>
+      <div className="flex flex-col py-8 px-4">
+        <MovieCast moviePayload={moviePayload} />
+      </div>
+      <CommentsSection />
+    </div>
   );
 };
 
