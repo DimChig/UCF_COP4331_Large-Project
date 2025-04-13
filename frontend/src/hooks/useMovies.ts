@@ -113,6 +113,21 @@ export const useMovies = (endpoint: string) =>
     retry: 2,
   });
 
+export const useMovie = (movieId: number) =>
+  useQuery<MovieData>({
+    queryKey: ["movies", movieId],
+    queryFn: () => {
+      // Build the axios config to pass query parameters.
+      const config: AxiosRequestConfig = {};
+
+      // Pass the config object as the second argument to axiosInstance.get
+      return axiosInstance
+        .get<MovieData>(`/api/movies/${movieId}`, config)
+        .then((res) => res.data);
+    },
+    retry: 2,
+  });
+
 export const useMoviesProfile = (endpoint: string) =>
   useQuery<FetchResponseMoviesWithUserSettings>({
     queryKey: ["movies", endpoint, getAuthToken()],
