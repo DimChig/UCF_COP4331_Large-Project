@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { jwtMiddleware } = require("./middleware/authMiddleware");
+const {
+  jwtMiddleware,
+  jwtMiddlewareOptional,
+} = require("./middleware/authMiddleware");
 const authController = require("./controllers/authController");
 const cardController = require("./controllers/cardController");
 const movieController = require("./controllers/movieController");
@@ -86,7 +89,7 @@ router.delete(
 // Get comments
 router.get(
   "/api/movies/:movieId/comments",
-  jwtMiddleware,
+  jwtMiddlewareOptional,
   commentsController.getComments
 );
 

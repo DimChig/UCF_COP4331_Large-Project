@@ -144,7 +144,9 @@ exports.getComments = async (req, res) => {
         firstName: comment.userId.firstName,
         lastName: comment.userId.lastName,
       },
-      isMine: comment.userId._id.toString() === req.user._id.toString(),
+      isMine: req.user
+        ? comment.userId._id.toString() === req.user._id.toString()
+        : false,
     }));
 
     // Sort: First by isMine (mine first) and then by createdAt (most recent first)
