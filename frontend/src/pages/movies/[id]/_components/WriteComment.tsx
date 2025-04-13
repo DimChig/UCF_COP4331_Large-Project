@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Card } from "@/components/ui/card";
 import {
   Form,
   FormField,
@@ -13,11 +12,15 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
+interface Props {
+  onComment: (commentText: string) => void;
+}
+
 const formSchema = z.object({
   text: z.string().nonempty({ message: "Comments cannot be empty!" }),
 });
 
-const WriteComment = () => {
+const WriteComment = ({ onComment }: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -25,7 +28,9 @@ const WriteComment = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {};
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    onComment(values.text);
+  };
 
   return (
     <Form {...form}>
