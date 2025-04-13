@@ -1,8 +1,5 @@
-import Comment from "./Comment";
-import { type CommentData } from "@/hooks/useMovies";
 import { useMovieComments } from "@/hooks/useComments";
-import { baseUrl, getAuthHeader, isAuthenticated } from "@/api/apiClient";
-import { Skeleton } from "@/components/ui/skeleton";
+import Comment from "./Comment";
 
 interface Props {
   // comments: CommentData[] | undefined;
@@ -10,14 +7,24 @@ interface Props {
 }
 
 const PostedComments = ({ movieId }: Props) => {
-  const { data, isLoading, error } = useMovieComments(movieId);
+  //TODO CHANGE TO movieId
+  const { data, isLoading, error } = useMovieComments(1);
   const comments = data?.results ?? [];
+
+  if (isLoading) {
+    return <div>Loading..</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div>
-      {comments ? (
-        comments.map((comment) => <Comment data={comment} />)
-      ) : (
+      {comments.map((comment) => (
+        <Comment comment={comment} key={comment.id} />
+      ))}
+      {comments.length === 0 && (
         <p className="text-gray-400 text-center text-lg">
           Its awfully empty here... Be the first one to post a coment!
         </p>

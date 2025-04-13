@@ -1,12 +1,9 @@
-import { useState } from "react";
+import { baseUrl, getAuthHeader, isAuthenticated } from "@/api/apiClient";
+import { Card } from "@/components/ui/card";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import PostedComments from "./PostedComments";
 import WriteComment from "./WriteComment";
-import { useMovieComments } from "@/hooks/useComments";
-import { useQueryClient } from "@tanstack/react-query";
-import { Card } from "@/components/ui/card";
-import { baseUrl, getAuthHeader, isAuthenticated } from "@/api/apiClient";
-import { CommentData } from "@/hooks/useMovies";
 
 interface Props {
   movieId: number;
@@ -23,20 +20,23 @@ const CommentsSection = ({ movieId }: Props) => {
     }
 
     try {
-      const response = await fetch(`${baseUrl}/api/movies/${movieId}/comments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: getAuthHeader(),
-        },
-        body: JSON.stringify({ text: commentText }),
-      });
+      const response = await fetch(
+        `${baseUrl}/api/movies/${movieId}/comments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getAuthHeader(),
+          },
+          body: JSON.stringify({ text: commentText }),
+        }
+      );
 
       if (!response.ok) {
         toast.error("Failed to post comment", {
-          description: `API request failed with HTTP ${response.status} ${response.statusText}: ${
-            JSON.parse(await response.text()).error
-          }`,
+          description: `API request failed with HTTP ${response.status} ${
+            response.statusText
+          }: ${JSON.parse(await response.text()).error}`,
         });
       }
 

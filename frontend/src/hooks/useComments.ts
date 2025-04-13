@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosRequestConfig } from "axios";
-import { type MovieData, type CommentData } from "./useMovies";
+import { type MovieData } from "./useMovies";
 import { getAuthHeader, getAuthToken, baseUrl } from "@/api/apiClient";
 
 const axiosInstance = axios.create({
@@ -12,13 +12,24 @@ interface FetchResponseAllUserComments {
   total_results: number;
 }
 
+export interface CommentData {
+  id: string;
+  author: {
+    firstName: string;
+    lastName: string;
+  };
+  text: string;
+  createdAt: Date;
+  isMine: boolean;
+}
+
 interface FetchResponseMovieComments {
   results: CommentData[];
 }
 
 export const useMovieComments = (movieId: number) => {
   return useQuery<FetchResponseMovieComments>({
-    queryKey: ["comments", movieId],
+    queryKey: ["comments", movieId, getAuthToken()],
     queryFn: () => {
       const config: AxiosRequestConfig = {
         headers: {
@@ -27,7 +38,10 @@ export const useMovieComments = (movieId: number) => {
       };
 
       return axiosInstance
-        .get<FetchResponseMovieComments>(`/api/movies/${movieId}/comments`, config)
+        .get<FetchResponseMovieComments>(
+          `/api/movies/${movieId}/comments`,
+          config
+        )
         .then((res) => res.data);
     },
     retry: 2,

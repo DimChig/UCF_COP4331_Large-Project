@@ -54,7 +54,9 @@ export const useInfiniteMovies = (sortBy: string, genres: string) =>
         params: { sortBy, genres, page: pageParam },
       };
 
-      return axiosInstance.get<FetchResponseMovies>("/api/movies", config).then((res) => res.data);
+      return axiosInstance
+        .get<FetchResponseMovies>("/api/movies", config)
+        .then((res) => res.data);
     },
     initialPageParam: 1,
 
@@ -114,16 +116,6 @@ export const useMovies = (endpoint: string) =>
     retry: 2,
   });
 
-export interface CommentData {
-  id: string;
-  author: {
-    firstName: string;
-    lastName: string;
-  };
-  text: string;
-  createdAt: Date;
-  isMine: boolean;
-}
 export interface MoviePayload {
   movie_data: MovieData;
   crew: {
@@ -142,7 +134,6 @@ export interface MoviePayload {
   images: {
     file_path: string;
   }[];
-  comments: CommentData[];
   similar: MovieData[];
 }
 
@@ -174,7 +165,10 @@ export const useMoviesProfile = (endpoint: string) =>
 
       // Pass the config object as the second argument to axiosInstance.get
       return axiosInstance
-        .get<FetchResponseMoviesWithUserSettings>(`/api/movies/${endpoint}`, config)
+        .get<FetchResponseMoviesWithUserSettings>(
+          `/api/movies/${endpoint}`,
+          config
+        )
         .then((res) => res.data);
     },
     retry: 2,
@@ -192,7 +186,9 @@ export const useUserSettings = () =>
       };
 
       // Pass the config object as the second argument to axiosInstance.get
-      return axiosInstance.get<UserSettings[]>("/api/movies/raw", config).then((res) => res.data);
+      return axiosInstance
+        .get<UserSettings[]>("/api/movies/raw", config)
+        .then((res) => res.data);
     },
     staleTime: 0,
     retry: 2,
