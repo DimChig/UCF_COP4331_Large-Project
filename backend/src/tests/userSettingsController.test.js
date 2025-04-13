@@ -1,90 +1,61 @@
-//Need mock
-jest.mock('../models/UserSettings');
+// src/tests/userSettingsController.test.js
 
-//imports
-const userSettingsController = require('../controllers/userSettingsController');
-const jwt = require('jsonwebtoken');
-const UserSettings = require('../models/UserSettings');
-const { updateSettingsSchema, ratingSchema } = require('../validations/userSettingsValidation');
-const { rateMovie } = require('../controllers/userSettingsController');
+// Import dependencies and validations
+const userSettingsController = require("../controllers/userSettingsController");
+const UserSettings = require("../models/UserSettings");
+const {
+  updateSettingsSchema,
+  ratingSchema,
+} = require("../validations/userSettingsValidation");
 
+// Mock the UserSettings model
+jest.mock("../models/UserSettings");
 
-describe('userSettings', () => {
+describe("UserSettings Controller", () => {
+  let req, res;
 
-    //beforeEach function
-    let req, res;
-    beforeEach(() => {
-        req = {
-            user: {userId: '1'},
-            params:{ movieId: '123'},
-            body:{}            
-        };
-        res = {
-            status: jest.fn(() => res),
-            json: jest.fn()
-        };
+  beforeEach(() => {
+    // Reset request and response objects for each test
+    req = {
+      user: { _id: "1", userId: "1" },
+      params: { movieId: "123" },
+      body: {}, // you can modify body to simulate different validations
+    };
 
-        jest.clearAllMocks();
-    });
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
 
-    //error 404
-    it('should return 404 if user is not found', async () => {
-        req.user = null;
+    jest.clearAllMocks();
+  });
 
-        //declare req, res
-        await userSettingsController.likeMovie(req, res);
+  describe("likeMovie", () => {
+    it("should return 404 if user is not found", async () => {
+      // Simulate missing user
+      req.user = null;
 
-        expect(res.status).toHaveBeenCalledWith(404);
-        expect(res.json).toHaveBeenCalledWith({
-        error: 'User not found',
-      });
-    });
-
-    //error 400
-    it('should return error 400 if rating is invalid', async() => {
-        req.user = 'mockUser';
-        req.movieId = '123';
-
-        await userSettingsController.rateMovie(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith(
-            expect.objectContaining({
-              message: 'Invalid rating',
-              errors: expect.any(Array),
-            })
-          );
-    });
-    /*happy scenario
-    it('should return status 200 if updated successfully', async () => {
-      const mockUpdated = {
-        userId: '1',
-        movieId: 123,
-        isLiked: true,
-        isSaved: false,
-        rating: null,
-      };
-    
-      req.user = { _id: '1' };
-      req.params.movieId = '123';
-    
-      // Mock the findOneAndUpdate method
-      UserSettings.findOneAndUpdate.mockResolvedValue(mockUpdated);
-      
       await userSettingsController.likeMovie(req, res);
-    
-    
-      // Debug log to inspect mock calls
-      console.log('Mock calls:', UserSettings.findOneAndUpdate.mock.calls);
-    
-      expect(UserSettings.findOneAndUpdate).toHaveBeenCalledWith(
-        { userId: '1', movieId: 123 }, // movieId as number after parsing
-        { $set: { isLiked: true } },
-        { new: true, upsert: true }
-      );
-    
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ updated: mockUpdated });
-    }); */
-    
+
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ error: "User not found" });
     });
+  });
+
+  describe("rateMovie", () => {
+    it("should return error 400 if rating is invalid", async () => {
+      // Here, req.body does not include a valid rating value so that it fails validation
+      await userSettingsController.rateMovie(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      // The response should contain the error message and an array of validation errors,
+      // similar to what your validation library returns.
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: "Invalid rating",
+          errors: expect.any(Array),
+        })
+      );
+    });
+  });
+});
