@@ -53,7 +53,7 @@ const InfoBanner: React.FunctionComponent<Props> = ({
                 <RatingBadge rating={movieData.vote_average} voteCount={movieData.vote_count} />
               </div>
               <div className="flex flex-col gap-2">
-                <Button onClick={onLiked}>
+                <Button onClick={onLiked} className="md:max-w-1/5">
                   {isLiked ? (
                     <>
                       <FaHeart className="text-rose-500" /> Unlike
@@ -64,7 +64,7 @@ const InfoBanner: React.FunctionComponent<Props> = ({
                     </>
                   )}
                 </Button>
-                <Button onClick={onSaved}>
+                <Button onClick={onSaved} className="md:max-w-1/5">
                   {isSaved ? (
                     <>
                       <FaBookmark className="text-yellow-400" /> Unsave
