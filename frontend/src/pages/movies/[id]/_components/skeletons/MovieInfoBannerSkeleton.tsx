@@ -37,7 +37,7 @@ const MovieInfoBannerSkeleton = () => {
             {/* Tagline & Overview Skeleton */}
             <div className="flex flex-col gap-2 mt-1">
               <Skeleton className="h-4 w-1/5" />
-              <Skeleton className="h-6 w-[89px]" />
+              <Skeleton className="h-6 w-[89px] my-2" />
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-5/6" />
