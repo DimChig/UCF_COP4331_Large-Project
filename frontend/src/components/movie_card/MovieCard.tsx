@@ -50,12 +50,12 @@ const MovieCard: React.FC<Props> = ({
     >
       {/* Movie Poster */}
       <div className="relative w-full">
-        <Skeleton className="w-full aspect-[2/3]" />
+        <Skeleton className="w-full aspect-[2/3] rounded-none" />
         <div className="absolute inset-0">
           <img
             src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
             alt={movie.title}
-            className="w-full object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
         <div className="absolute inset-0">

@@ -7,6 +7,8 @@ import CommentsSection from "./CommentsSection";
 import MovieCast from "./MovieCast";
 import MovieInfoBanner from "./MovieInfoBanner";
 import { useQueryClient } from "@tanstack/react-query";
+import MovieMedia from "./MovieMedia";
+import MoviesSimilar from "./MoviesSimilar";
 
 interface Props {
   movieId: number;
@@ -118,6 +120,12 @@ const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) =>
         <MovieCast moviePayload={moviePayload} />
       </div>
       <CommentsSection movieId={movieId} />
+      <div className="flex flex-col py-8 px-4">
+        <MovieMedia images={moviePayload.images} />
+      </div>
+      <div className="flex flex-col py-8 px-4">
+        <MoviesSimilar moviePayload={moviePayload} />
+      </div>
     </div>
   );
 };

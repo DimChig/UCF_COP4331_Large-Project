@@ -22,7 +22,7 @@ const updateSetting = async (req, res, update) => {
     if (!validation.success) {
       return res
         .status(400)
-        .json({ message: "Invalid rating", errors: validation.error.errors });
+        .json({ message: "Invalid params", errors: validation.error.errors });
     }
     const validationData = validation.data;
 
@@ -31,7 +31,6 @@ const updateSetting = async (req, res, update) => {
       { $set: update },
       { new: true, upsert: true }
     );
-
     return res.status(200).json({
       updated,
     });
