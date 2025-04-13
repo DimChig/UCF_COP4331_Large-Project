@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useParams } from "react-router-dom";
 import ErrorPage from "../../error/ErrorPage";
 import InfoBanner from "./_components/InfoBanner";
@@ -30,7 +31,23 @@ const CardDetailsPage = () => {
     return <ErrorPage />;
   }
 
-  const { isLiked, isSaved, rating } = movieUserSettings;
+  // Here, we are using refs in order to not re-render the whole page when we
+  // change a value. Since we only want the child info-bar to change, we just
+  // pass it the new props, which forces only it to re-render. That way we can
+  // easily update the database and change the ref value in a single function.
+  const isLiked = useRef(movieUserSettings.isLiked);
+  const isSaved = useRef(movieUserSettings.isSaved);
+  const rating = useRef(movieUserSettings.rating);
+
+  const handleLike = () => {
+    isLiked.current = !isLiked.current;
+
+    const response = fetch();
+  };
+
+  const handleSave = () => {
+    isSaved.current = !isSaved.current;
+  };
 
   const { data, isLoading, error } = /*useInfiniteMoviesSearch(cardId) */ {
     data: {
@@ -43,7 +60,7 @@ const CardDetailsPage = () => {
               overview: "Lorum ipsum",
               popularity: "amazing",
               poster_path: "/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
-              backdrop_path: "",
+              backdrop_path: "/2Nti3gYAX513wvhp8IiLL6ZDyOm.jpg",
               release_date: "2025",
               vote_average: 5,
               vote_count: 1000000,
@@ -64,11 +81,16 @@ const CardDetailsPage = () => {
   }
 
   return (
-    <>
-      <section>
-        <InfoBanner movieData={movieData} isLiked={isLiked} isSaved={isSaved} rating={rating} />
-      </section>
-    </>
+    <section className="w-full h-fit">
+      <InfoBanner
+        movieData={movieData}
+        isLiked={isLiked.current}
+        onLiked={handleLike}
+        isSaved={isSaved.current}
+        onSaved={handleSave}
+        rating={rating.current}
+      />
+    </section>
   );
 };
 
