@@ -50,7 +50,7 @@ const InfoBanner: React.FunctionComponent<Props> = ({
                 <span className="text-white inline-block font-semibold text-lg mr-2 align-top">
                   Average rating:{" "}
                 </span>
-                <RatingBadge rating={movieData.vote_average} />
+                <RatingBadge rating={movieData.vote_average} voteCount={movieData.vote_count} />
               </div>
               <div className="flex flex-col gap-2">
                 <Button onClick={onLiked}>
