@@ -5,6 +5,7 @@ import { AlertCircle } from "lucide-react";
 import { useParams } from "react-router-dom";
 import MovieDetailsContainer from "./_components/MovieDetailsContainer";
 import { isAuthenticated } from "@/api/apiClient";
+import MovieDetailsContainerSkeleton from "./_components/MovieDetailsContainerSkeleton";
 
 const MovieDetailsPage = () => {
   const params = useParams();
@@ -22,7 +23,7 @@ const MovieDetailsPage = () => {
   const userSetting = userSettings?.find((s) => s.movieId === movieId);
 
   if (isLoading) {
-    return <div className="animate-pulse">Loading...</div>;
+    return <MovieDetailsContainerSkeleton />;
   }
 
   if (!data || error) {
