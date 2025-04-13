@@ -30,6 +30,34 @@ const MovieDetailsContainer = ({ moviePayload, userSetting }: Props) => {
     console.log("New rating:", newRating);
   };
 
+  // const handleLike = async (): Promise<void> => {
+  //   if (!isAuthenticated()) {
+  //     toast.error("User not authenticated.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await fetch(`${baseUrl}/api/movies/${movieId}/like`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: getAuthHeader(),
+  //       },
+  //     });
+
+  //     if (!response.ok) {
+  //       toast.error("Failed to like the movie", {
+  //         description: `Status: ${response.status} ${response.statusText}`,
+  //       });
+  //       return;
+  //     }
+
+  //     setIsLiked(!isLiked);
+  //   } catch (error) {
+  //     toast.error("Error liking movie:", { description: String(error) });
+  //   }
+  // };
+
   return (
     <MovieInfoBanner
       moviePayload={moviePayload}

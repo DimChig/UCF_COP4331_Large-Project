@@ -132,6 +132,16 @@ export interface MoviePayload {
   images: {
     file_path: string;
   }[];
+  comments: {
+    id: string;
+    author: {
+      firstName: string;
+      lastName: string;
+    };
+    text: string;
+    createdAt: Date;
+    isMine: boolean;
+  }[];
   similar: MovieData[];
 }
 

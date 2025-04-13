@@ -137,7 +137,7 @@ exports.getComments = async (req, res) => {
 
     // Preprocess cards (reassign fields)
     const ret = comments.map((comment) => ({
-      id: comments._id,
+      id: comment._id,
       text: comment.text,
       createdAt: comment.createdAt,
       author: {
