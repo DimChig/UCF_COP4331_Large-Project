@@ -65,7 +65,7 @@ const CardDetailsPage = () => {
     isSaved.current = !isSaved.current;
   };
 
-  const { data, isLoading, error } = useMovies(movieId.toString()); /* {
+  const { data: movieData, isLoading, error } = useMovies(movieId.toString()); /* {
     data: {
       pages: [
         {
@@ -89,8 +89,6 @@ const CardDetailsPage = () => {
     error: null,
   };*/
 
-  const movieData = data?.results?.[0];
-
   if (!movieData) {
     toast("Failed to laod movie data.");
     console.error("Failed to get movieData.", movieData);
@@ -100,7 +98,7 @@ const CardDetailsPage = () => {
   return (
     <section className="w-full h-fit">
       <InfoBanner
-        movieData={movieData}
+        movieData={movieData as unknown as MovieData}
         isLiked={isLiked.current}
         onLiked={handleLike}
         isSaved={isSaved.current}
