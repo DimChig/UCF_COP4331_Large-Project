@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import ErrorPage from "../../error/ErrorPage";
 import InfoBanner from "./_components/InfoBanner";
+import ReviewSection from "./_components/ReviewSection";
 import { isAuthenticated, getAuthHeader } from "@/api/apiClient";
 import { useUserSettings } from "@/hooks/useMovies";
 import { useMovies, type MovieData, type UserSettings } from "@/hooks/useMovies";
@@ -10,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
 
-const baseUrl = "http://localhost:5173/";
+const baseUrl = "http://localhost:5000";
 
 const CardDetailsPage = () => {
   const { data: userSettings } = isAuthenticated() ? useUserSettings() : { data: [] };
@@ -41,7 +42,6 @@ const CardDetailsPage = () => {
   }
 
   const handleLike = async (): Promise<void> => {
-    toast.info("Running like...");
     if (!isAuthenticated()) {
       toast.error("User not authenticated.");
       return;
@@ -56,12 +56,12 @@ const CardDetailsPage = () => {
         },
       });
 
-      // if (!response.ok) {
-      //   toast.error("Failed to like the movie", {
-      //     description: `Status: ${response.status}: ${response.statusText}`,
-      //   });
-      //   return;
-      // }
+      if (!response.ok) {
+        toast.error("Failed to like the movie", {
+          description: `Status: ${response.status} ${response.statusText}`,
+        });
+        return;
+      }
 
       setIsLiked(!isLiked);
     } catch (error) {
@@ -74,16 +74,21 @@ const CardDetailsPage = () => {
   };
 
   return (
-    <section className="w-full h-fit">
-      <InfoBanner
-        movieData={movieData as unknown as MovieData}
-        isLiked={isLiked}
-        onLiked={handleLike}
-        isSaved={isSaved}
-        onSaved={handleSave}
-        rating={rating}
-      />
-    </section>
+    <>
+      <section className="w-full h-fit">
+        <InfoBanner
+          movieData={movieData as unknown as MovieData}
+          isLiked={isLiked}
+          onLiked={handleLike}
+          isSaved={isSaved}
+          onSaved={handleSave}
+          rating={rating}
+        />
+      </section>
+      <section>
+        <ReviewSection />
+      </section>
+    </>
   );
 };
 

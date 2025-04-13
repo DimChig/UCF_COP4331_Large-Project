@@ -46,9 +46,9 @@ const InfoBanner: React.FunctionComponent<Props> = ({
             </div>
             <p className="text-white">{movieData.overview}</p>
             <div className="flex flex-col gap-5 mt-3">
-              <div className="inline-flex h-fit">
+              <div className="inline-flex h-fit gap-0.5">
                 <span className="text-white inline-block font-semibold text-lg mr-2 align-top">
-                  Average rating:{" "}
+                  Average rating:
                 </span>
                 <RatingBadge rating={movieData.vote_average} voteCount={movieData.vote_count} />
               </div>
