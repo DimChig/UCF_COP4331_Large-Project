@@ -1,9 +1,10 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useMovie } from "@/hooks/useMovies";
+import { useMovie, useUserSettings } from "@/hooks/useMovies";
 import ErrorPage from "@/pages/error/ErrorPage";
 import { AlertCircle } from "lucide-react";
 import { useParams } from "react-router-dom";
 import MovieDetailsContainer from "./_components/MovieDetailsContainer";
+import { isAuthenticated } from "@/api/apiClient";
 
 const MovieDetailsPage = () => {
   const params = useParams();
@@ -13,6 +14,12 @@ const MovieDetailsPage = () => {
   const movieId = Number(params.movieId);
 
   const { data, isLoading, error } = useMovie(movieId);
+
+  const { data: userSettings } = isAuthenticated()
+    ? useUserSettings()
+    : { data: [] };
+
+  const userSetting = userSettings?.find((s) => s.movieId === movieId);
 
   if (isLoading) {
     return <div className="animate-pulse">Loading...</div>;
@@ -30,7 +37,7 @@ const MovieDetailsPage = () => {
     );
   }
 
-  return <MovieDetailsContainer movie={data} />;
+  return <MovieDetailsContainer movie={data} userSetting={userSetting} />;
 };
 
 export default MovieDetailsPage;
