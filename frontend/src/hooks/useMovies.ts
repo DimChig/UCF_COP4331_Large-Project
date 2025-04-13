@@ -45,11 +45,6 @@ interface FetchResponseMoviesWithUserSettings {
   total_results: number;
 }
 
-interface FetchResponseAllUserComments {
-  results: { movie_data: MovieData; text: string; createdAt: Date }[];
-  total_results: number;
-}
-
 export const useInfiniteMovies = (sortBy: string, genres: string) =>
   useInfiniteQuery<FetchResponseMovies>({
     queryKey: ["movies", sortBy, genres],
@@ -200,24 +195,5 @@ export const useUserSettings = () =>
       return axiosInstance.get<UserSettings[]>("/api/movies/raw", config).then((res) => res.data);
     },
     staleTime: 0,
-    retry: 2,
-  });
-
-export const useCommentsProfile = () =>
-  useQuery<FetchResponseAllUserComments>({
-    queryKey: ["comments", getAuthToken()],
-    queryFn: () => {
-      // Build the axios config to pass query parameters.
-      const config: AxiosRequestConfig = {
-        headers: {
-          Authorization: getAuthHeader(),
-        },
-      };
-
-      // Pass the config object as the second argument to axiosInstance.get
-      return axiosInstance
-        .get<FetchResponseAllUserComments>(`/api/comments`, config)
-        .then((res) => res.data);
-    },
     retry: 2,
   });

@@ -1,4 +1,4 @@
-import { useCommentsProfile } from "@/hooks/useMovies";
+import { useCommentsProfile } from "@/hooks/useComments";
 import MoviesGridContainer from "../movies/_components/MoviesGridContainer";
 import ProfileCommentCard from "./ProfileCommentCard";
 
@@ -29,9 +29,7 @@ const CommentsSection = () => {
                   />
                 );
               })}
-              {(!comments ||
-                !comments.results ||
-                comments.results.length == 0) && (
+              {(!comments || !comments.results || comments.results.length == 0) && (
                 <div>You haven't posted any comments yet.</div>
               )}
             </MoviesGridContainer>
