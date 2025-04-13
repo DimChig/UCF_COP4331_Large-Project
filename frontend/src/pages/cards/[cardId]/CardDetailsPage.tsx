@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import ErrorPage from "../../error/ErrorPage";
 import InfoBanner from "./_components/InfoBanner";
@@ -28,17 +28,22 @@ const CardDetailsPage = () => {
     rating: null,
   };
 
-  // Here, we are using refs in order to not re-render the whole page when we
-  // change a value. Since we only want the child info-bar to change, we just
-  // pass it the new props, which forces only it to re-render. That way we can
-  // easily update the database and change the ref value in a single function.
-  const isLiked = useRef(movieUserSettings.isLiked);
-  const isSaved = useRef(movieUserSettings.isSaved);
-  const rating = useRef(movieUserSettings.rating);
+  const [isLiked, setIsLiked] = useState(movieUserSettings.isLiked);
+  const [isSaved, setIsSaved] = useState(movieUserSettings.isSaved);
+  const [rating, setRating] = useState(movieUserSettings.rating);
+
+  const { data: movieData } = useMovies(movieId.toString());
+
+  if (!movieData) {
+    toast("Failed to laod movie data.");
+    console.error("Failed to get movieData.", movieData);
+    return <ErrorPage />;
+  }
 
   const handleLike = async (): Promise<void> => {
-    toast.loading("Running like...");
+    toast.info("Running like...");
     if (!isAuthenticated()) {
+      toast.error("User not authenticated.");
       return;
     }
 
@@ -51,59 +56,32 @@ const CardDetailsPage = () => {
         },
       });
 
-      if (!response.ok) {
-        toast.error("Failed to like the movie");
-      }
+      // if (!response.ok) {
+      //   toast.error("Failed to like the movie", {
+      //     description: `Status: ${response.status}: ${response.statusText}`,
+      //   });
+      //   return;
+      // }
 
-      isLiked.current = !isLiked.current;
+      setIsLiked(!isLiked);
     } catch (error) {
       toast.error("Error liking movie:", { description: String(error) });
     }
   };
 
   const handleSave = async (): Promise<void> => {
-    isSaved.current = !isSaved.current;
+    setIsSaved(!isSaved);
   };
-
-  const { data: movieData, isLoading, error } = useMovies(movieId.toString()); /* {
-    data: {
-      pages: [
-        {
-          results: [
-            {
-              id: 0,
-              title: "Test Movie",
-              overview: "Lorum ipsum",
-              popularity: "amazing",
-              poster_path: "/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
-              backdrop_path: "/2Nti3gYAX513wvhp8IiLL6ZDyOm.jpg",
-              release_date: "2025",
-              vote_average: 5,
-              vote_count: 1000000,
-            },
-          ],
-        },
-      ],
-    },
-    isLoading: false,
-    error: null,
-  };*/
-
-  if (!movieData) {
-    toast("Failed to laod movie data.");
-    console.error("Failed to get movieData.", movieData);
-    return <ErrorPage />;
-  }
 
   return (
     <section className="w-full h-fit">
       <InfoBanner
         movieData={movieData as unknown as MovieData}
-        isLiked={isLiked.current}
+        isLiked={isLiked}
         onLiked={handleLike}
-        isSaved={isSaved.current}
+        isSaved={isSaved}
         onSaved={handleSave}
-        rating={rating.current}
+        rating={rating}
       />
     </section>
   );
