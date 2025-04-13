@@ -7,6 +7,7 @@ import CommentsSection from "./CommentsSection";
 import MovieCast from "./MovieCast";
 import MovieInfoBanner from "./MovieInfoBanner";
 import { useQueryClient } from "@tanstack/react-query";
+import MovieMedia from "./MovieMedia";
 
 interface Props {
   movieId: number;
@@ -20,7 +21,11 @@ interface Props {
     | undefined;
 }
 
-const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) => {
+const MovieDetailsContainer = ({
+  movieId,
+  moviePayload,
+  userSetting,
+}: Props) => {
   const [isLiked, setIsLiked] = useState(userSetting?.isLiked || false);
   const [isSaved, setIsSaved] = useState(userSetting?.isSaved || false);
 
@@ -77,14 +82,17 @@ const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) =>
     }
 
     try {
-      const response = await fetch(`${baseUrl}/api/movies/${movieId}/${endpoint}`, {
-        method: method,
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: getAuthHeader(),
-        },
-      });
+      const response = await fetch(
+        `${baseUrl}/api/movies/${movieId}/${endpoint}`,
+        {
+          method: method,
+          body: JSON.stringify(payload),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getAuthHeader(),
+          },
+        }
+      );
 
       if (!response.ok) {
         toast.error("Failed to like the movie", {
@@ -118,6 +126,9 @@ const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) =>
         <MovieCast moviePayload={moviePayload} />
       </div>
       <CommentsSection comments={moviePayload.comments} movieId={movieId} />
+      <div className="flex flex-col py-8 px-4">
+        <MovieMedia images={moviePayload.images} />
+      </div>
     </div>
   );
 };
