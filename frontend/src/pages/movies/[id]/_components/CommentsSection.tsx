@@ -1,5 +1,6 @@
-import { Card } from "@/components/ui/card";
 import WriteComment from "./WriteComment";
+import Comment from "./Comment";
+import { Card } from "@/components/ui/card";
 
 const CommentsSection = () => {
   return (
@@ -10,6 +11,7 @@ const CommentsSection = () => {
           <WriteComment />
           <hr />
           {/* Comments go here. */}
+          <Comment username="John Doe" comment="This movie rocks!" rating={5} />
         </Card>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Card } from "@/components/ui/card";
 import {
   Form,
@@ -9,8 +10,8 @@ import {
   FormDescription,
   FormLabel,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   text: z.string().nonempty({ message: "Comments cannot be empty!" }),
@@ -44,6 +45,7 @@ const WriteComment = () => {
             </FormItem>
           )}
         />
+        <Button className="mt-4">Post</Button>
       </form>
     </Form>
   );
