@@ -37,7 +37,9 @@ const MovieDetailsPage = () => {
     );
   }
 
-  return <MovieDetailsContainer movie={data} userSetting={userSetting} />;
+  return (
+    <MovieDetailsContainer moviePayload={data} userSetting={userSetting} />
+  );
 };
 
 export default MovieDetailsPage;

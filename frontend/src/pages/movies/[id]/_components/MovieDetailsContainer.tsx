@@ -1,11 +1,11 @@
 import RatingBadge from "@/components/movie_card/RatingBadge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MovieData } from "@/hooks/useMovies";
+import { MoviePayload } from "@/hooks/useMovies";
 import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart } from "react-icons/fa";
 
 interface Props {
-  movie: MovieData;
+  moviePayload: MoviePayload;
   userSetting:
     | {
         isLiked: boolean;
@@ -15,7 +15,8 @@ interface Props {
     | undefined;
 }
 
-const MovieDetailsContainer = ({ movie, userSetting }: Props) => {
+const MovieDetailsContainer = ({ moviePayload, userSetting }: Props) => {
+  const { movie_data: movie } = moviePayload;
   return (
     <div className="flex flex-col w-full h-fit z-10">
       <div className="relative w-full h-full overflow-hidden">
