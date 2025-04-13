@@ -11,7 +11,10 @@ const MovieCardSkeletonSearch = () => {
     <Card className="w-full shadow-md p-0 overflow-hidden gap-4">
       {/* Movie Poster */}
       <div className="flex">
-        <Skeleton className="h-32 aspect-[2/3] rounded-none" />
+        <div className="relative">
+          <Skeleton className="absolute h-full w-full rounded-none" />
+          <div className="h-32 aspect-[2/3] rounded-none bg-none" />
+        </div>
 
         <div className="p-4 w-full">
           <div className="flex flex-col justify-between h-full">
@@ -23,8 +26,8 @@ const MovieCardSkeletonSearch = () => {
                 <Skeleton className="w-48 h-4 " />
               </CardDescription>
             </div>
-            <CardFooter className="p-0 pt-4 m-0 text-md">
-              <div className="flex flex-col w-full gap-1">
+            <CardFooter className="p-0 pt-4 m-0 text-md mt-2 mb-1">
+              <div className="flex flex-col w-full gap-2">
                 <Skeleton className="w-3/5 h-4" />
                 <Skeleton className="w-full h-4" />
               </div>

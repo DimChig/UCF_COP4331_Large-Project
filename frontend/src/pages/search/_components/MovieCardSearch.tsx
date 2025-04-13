@@ -30,7 +30,8 @@ const MovieCardSearch: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
       {/* Movie Poster */}
       <div className="flex">
         <div className="relative w-fit">
-          <Skeleton className="h-32 aspect-[2/3]" />
+          <Skeleton className="absolute h-full w-full rounded-none" />
+          <div className="h-32 aspect-[2/3] rounded-none bg-none" />
           <div className="absolute inset-0">
             <img
               src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
