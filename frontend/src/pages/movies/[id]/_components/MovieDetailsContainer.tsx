@@ -33,7 +33,6 @@ const MovieDetailsContainer = ({ moviePayload, userSetting }: Props) => {
   return (
     <MovieInfoBanner
       moviePayload={moviePayload}
-      userSetting={userSetting}
       isLiked={isLiked}
       onLiked={onLiked}
       isSaved={isSaved}

@@ -8,13 +8,6 @@ import RatingStars from "./RatingStars";
 
 interface Props {
   moviePayload: MoviePayload;
-  userSetting:
-    | {
-        isLiked: boolean;
-        isSaved: boolean;
-        rating: number | null;
-      }
-    | undefined;
   isLiked: boolean;
   onLiked: () => void;
   isSaved: boolean;
@@ -25,7 +18,6 @@ interface Props {
 
 const MovieInfoBanner = ({
   moviePayload,
-  userSetting,
   isLiked,
   onLiked,
   isSaved,
@@ -82,14 +74,14 @@ const MovieInfoBanner = ({
               </div>
               <div className="flex gap-4">
                 <ButtonContainer onClick={onLiked}>
-                  {userSetting?.isLiked ? (
+                  {isLiked ? (
                     <FaHeart className="min-w-5 min-h-5 text-rose-500" />
                   ) : (
                     <FaRegHeart className="min-w-5 min-h-5 text-white/60 group-hover:text-black transition" />
                   )}
                 </ButtonContainer>
                 <ButtonContainer onClick={onSaved}>
-                  {userSetting?.isSaved ? (
+                  {isSaved ? (
                     <FaBookmark className="min-w-5 min-h-5 text-yellow-400" />
                   ) : (
                     <FaRegBookmark className="min-w-5 min-h-5 text-white/60 group-hover:text-black transition" />
