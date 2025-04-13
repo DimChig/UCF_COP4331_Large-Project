@@ -25,7 +25,9 @@ interface Props {
 }
 
 export function formatDate(releaseDate: string): string {
+  if (!releaseDate) return "";
   const date = new Date(releaseDate);
+  if (!date) return "";
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
