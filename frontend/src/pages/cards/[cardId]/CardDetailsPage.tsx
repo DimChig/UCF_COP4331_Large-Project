@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
 
-const baseUrl = "http://localhost:5173/";
+const baseUrl = "http://localhost:5000";
 
 const CardDetailsPage = () => {
   const { data: userSettings } = isAuthenticated()
@@ -49,7 +49,6 @@ const CardDetailsPage = () => {
   }
 
   const handleLike = async (): Promise<void> => {
-    toast.info("Running like...");
     if (!isAuthenticated()) {
       toast.error("User not authenticated.");
       return;
@@ -64,12 +63,12 @@ const CardDetailsPage = () => {
         },
       });
 
-      // if (!response.ok) {
-      //   toast.error("Failed to like the movie", {
-      //     description: `Status: ${response.status}: ${response.statusText}`,
-      //   });
-      //   return;
-      // }
+      if (!response.ok) {
+        toast.error("Failed to like the movie", {
+          description: `Status: ${response.status} ${response.statusText}`,
+        });
+        return;
+      }
 
       setIsLiked(!isLiked);
     } catch (error) {
@@ -82,16 +81,18 @@ const CardDetailsPage = () => {
   };
 
   return (
-    <section className="w-full h-fit">
-      <InfoBanner
-        movieData={data.movie_data as MovieData}
-        isLiked={isLiked}
-        onLiked={handleLike}
-        isSaved={isSaved}
-        onSaved={handleSave}
-        rating={rating}
-      />
-    </section>
+    <>
+      <section className="w-full h-fit">
+        <InfoBanner
+          movieData={data.movie_data as MovieData}
+          isLiked={isLiked}
+          onLiked={handleLike}
+          isSaved={isSaved}
+          onSaved={handleSave}
+          rating={rating}
+        />
+      </section>
+    </>
   );
 };
 
