@@ -5,6 +5,7 @@ import { baseUrl, getAuthHeader, isAuthenticated } from "@/api/apiClient";
 import AuthDialog from "./AuthDialog";
 import { toast } from "sonner";
 import CommentsSection from "./CommentsSection";
+import MovieCast from "./MovieCast";
 
 interface Props {
   movieId: number;
@@ -51,8 +52,6 @@ const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) =>
   };
 
   const onRatingChanged = (newRating: number) => {
-    console.log("New rating:", newRating);
-
     if (newRating > 0) {
       handleUpdate("rating", "POST", { rating: newRating }, () => {
         toast.success("You rated this movie!");
@@ -97,7 +96,7 @@ const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) =>
   };
 
   return (
-    <div className="flex flex-col">
+    <>
       <AuthDialog isOpened={authDialogOpened} setOpened={setAuthDialogOpened} />
       <MovieInfoBanner
         moviePayload={moviePayload}
@@ -108,8 +107,7 @@ const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) =>
         rating={userSetting?.rating || 0}
         onRatingChanged={onRatingChanged}
       />
-      <CommentsSection />
-    </div>
+    </>
   );
 };
 

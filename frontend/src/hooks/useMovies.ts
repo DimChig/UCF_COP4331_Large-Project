@@ -17,6 +17,13 @@ export interface MovieData {
   release_date: string;
   vote_average: number;
   vote_count: number;
+  genres:
+    | {
+        id: number;
+        name: string;
+      }[]
+    | undefined;
+  runtime: number;
 }
 
 export interface UserSettings {
