@@ -20,6 +20,8 @@ interface Props {
   movie: MovieData;
   isLiked?: boolean;
   isSaved?: boolean;
+  className?: string;
+  displayRating?: boolean;
 }
 
 export function formatDate(releaseDate: string): string {
@@ -31,11 +33,19 @@ export function formatDate(releaseDate: string): string {
   });
 }
 
-const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
+const MovieCard: React.FC<Props> = ({
+  movie,
+  isLiked,
+  isSaved,
+  className,
+  displayRating = true,
+}) => {
   const navigate = useNavigate();
 
   return (
-    <Card className="w-full min-w-[200px] shadow-md p-0 overflow-hidden gap-4">
+    <Card
+      className={`w-full min-w-[200px] shadow-md p-0 overflow-hidden gap-4 ${className}`}
+    >
       {/* Movie Poster */}
       <div className="relative w-full">
         <Skeleton className="w-full aspect-[2/3]" />
@@ -76,7 +86,12 @@ const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved }) => {
         </CardTitle>
         <CardDescription className="flex justify-between">
           <div>{formatDate(movie.release_date)}</div>
-          <RatingBadge rating={movie.vote_average} />
+          {displayRating && (
+            <RatingBadge
+              rating={movie.vote_average}
+              voteCount={movie.vote_count}
+            />
+          )}
         </CardDescription>
       </CardHeader>
     </Card>

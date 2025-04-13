@@ -2,9 +2,11 @@ import { Badge } from "@/components/ui/badge";
 
 interface Props {
   rating: number;
+  voteCount: number;
 }
 
-const RatingBadge = ({ rating }: Props) => {
+const RatingBadge = ({ rating, voteCount }: Props) => {
+  if (voteCount == 0) return null;
   return (
     <Badge className={`rounded-full ${getRatingBadgeColor(rating)}`}>
       {rating.toFixed(1)}

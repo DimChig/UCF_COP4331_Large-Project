@@ -89,7 +89,7 @@ exports.getMovies = async (req, res) => {
         without_genres: "99,10755",
         sort_by: data.sortBy,
         "vote_count.gte": 200,
-        "release_date.lte": getCurrentDateFormatted(),
+        "primary_release_date.lte": getCurrentDateFormatted(),
       });
     },
     searchMoviesFilterSchema
@@ -113,14 +113,31 @@ exports.getNowPlaying = async (req, res) => {
 // get Top Rated
 exports.getTopRated = async (req, res) => {
   await handleMovieRequest(req, res, (data) => {
-    return moviedb.movieTopRated({ page: data.page });
+    return moviedb.discoverMovie({
+      page: data.page,
+      language: "en-US",
+      include_adult: false,
+      include_video: false,
+      without_genres: "99,10755",
+      sort_by: "vote_average.desc",
+      "vote_count.gte": 25000,
+      "primary_release_date.gte": "2000-01-01",
+    });
   });
 };
 
 // get Upcoming
 exports.getUpcoming = async (req, res) => {
   await handleMovieRequest(req, res, (data) => {
-    return moviedb.upcomingMovies({ page: data.page });
+    return moviedb.discoverMovie({
+      page: data.page,
+      language: "en-US",
+      include_adult: false,
+      include_video: false,
+      without_genres: "99,10755",
+      sort_by: "popularity.desc",
+      "primary_release_date.gte": getCurrentDateFormatted(),
+    });
   });
 };
 
