@@ -21,6 +21,7 @@ interface Props {
   isLiked?: boolean;
   isSaved?: boolean;
   className?: string;
+  displayRating?: boolean;
 }
 
 export function formatDate(releaseDate: string): string {
@@ -32,7 +33,13 @@ export function formatDate(releaseDate: string): string {
   });
 }
 
-const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved, className }) => {
+const MovieCard: React.FC<Props> = ({
+  movie,
+  isLiked,
+  isSaved,
+  className,
+  displayRating = true,
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -79,7 +86,12 @@ const MovieCard: React.FC<Props> = ({ movie, isLiked, isSaved, className }) => {
         </CardTitle>
         <CardDescription className="flex justify-between">
           <div>{formatDate(movie.release_date)}</div>
-          <RatingBadge rating={movie.vote_average} />
+          {displayRating && (
+            <RatingBadge
+              rating={movie.vote_average}
+              voteCount={movie.vote_count}
+            />
+          )}
         </CardDescription>
       </CardHeader>
     </Card>

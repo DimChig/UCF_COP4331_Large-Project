@@ -42,6 +42,7 @@ const MoviesHorizontalSection = ({ label, endpoint }: Props) => {
                     isLiked={userSetting?.isLiked}
                     isSaved={userSetting?.isSaved}
                     className="w-[200px]"
+                    displayRating={endpoint !== "upcoming"}
                   />
                 );
               })}

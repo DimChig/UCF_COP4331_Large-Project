@@ -101,7 +101,7 @@ export const useMovies = (endpoint: string) =>
       // Build the axios config to pass query parameters.
       const config: AxiosRequestConfig = {
         params: {
-          limit: 2,
+          limit: 15,
         },
       };
 
