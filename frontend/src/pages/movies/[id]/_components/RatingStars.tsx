@@ -3,9 +3,10 @@ import { FaStar } from "react-icons/fa";
 
 interface Props {
   initialValue: number | null | undefined;
+  onRatingChanged: (newRating: number) => void;
 }
 
-const RatingStars = ({ initialValue }: Props) => {
+const RatingStars = ({ onRatingChanged, initialValue }: Props) => {
   // The rating is an integer between 0 and 10 (each unit corresponds to a half-star).
   const [rating, setRating] = useState(initialValue ?? 0);
   // A ref to keep track of the latest rating for printing on mouseup.
@@ -44,7 +45,7 @@ const RatingStars = ({ initialValue }: Props) => {
       window.removeEventListener("mousemove", handleMouseMove as any);
       window.removeEventListener("mouseup", handleMouseUp);
       // Log the final snapped rating value to console
-      console.log("Final rating:", finalRatingRef.current);
+      onRatingChanged(Number(finalRatingRef.current));
     };
 
     window.addEventListener("mousemove", handleMouseMove as any);

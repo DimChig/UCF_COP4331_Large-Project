@@ -1,9 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { PropsWithChildren } from "react";
+import { ReactNode } from "react";
 
-const ButtonContainer = ({ children }: PropsWithChildren) => {
+interface Props {
+  onClick: () => void;
+  children: ReactNode;
+}
+
+const ButtonContainer = ({ onClick, children }: Props) => {
   return (
-    <Button className="group bg-white/10 hover:bg-white text-black rounded-full w-10 h-10 cursor-pointer">
+    <Button
+      onClick={onClick}
+      className="group bg-white/10 hover:bg-white text-black rounded-full w-10 h-10 cursor-pointer"
+    >
       {children}
     </Button>
   );

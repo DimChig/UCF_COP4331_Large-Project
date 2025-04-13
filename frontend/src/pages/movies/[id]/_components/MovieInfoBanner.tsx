@@ -1,10 +1,10 @@
 import RatingBadge from "@/components/movie_card/RatingBadge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MoviePayload } from "@/hooks/useMovies";
 import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart } from "react-icons/fa";
 import ButtonContainer from "./ButtonContainer";
 import RatingStars from "./RatingStars";
-import { Button } from "@/components/ui/button";
 
 interface Props {
   moviePayload: MoviePayload;
@@ -15,9 +15,24 @@ interface Props {
         rating: number | null;
       }
     | undefined;
+  isLiked: boolean;
+  onLiked: () => void;
+  isSaved: boolean;
+  onSaved: () => void;
+  rating: number | null;
+  onRatingChanged: (newRating: number) => void;
 }
 
-const MovieInfoBanner = ({ moviePayload, userSetting }: Props) => {
+const MovieInfoBanner = ({
+  moviePayload,
+  userSetting,
+  isLiked,
+  onLiked,
+  isSaved,
+  onSaved,
+  rating,
+  onRatingChanged,
+}: Props) => {
   const { movie_data: movie, crew } = moviePayload;
   return (
     <div className="flex flex-col w-full h-fit z-10">
@@ -66,14 +81,14 @@ const MovieInfoBanner = ({ moviePayload, userSetting }: Props) => {
                 />
               </div>
               <div className="flex gap-4">
-                <ButtonContainer>
+                <ButtonContainer onClick={onLiked}>
                   {userSetting?.isLiked ? (
                     <FaHeart className="min-w-5 min-h-5 text-rose-500" />
                   ) : (
                     <FaRegHeart className="min-w-5 min-h-5 text-white/60 group-hover:text-black transition" />
                   )}
                 </ButtonContainer>
-                <ButtonContainer>
+                <ButtonContainer onClick={onSaved}>
                   {userSetting?.isSaved ? (
                     <FaBookmark className="min-w-5 min-h-5 text-yellow-400" />
                   ) : (
@@ -84,7 +99,10 @@ const MovieInfoBanner = ({ moviePayload, userSetting }: Props) => {
                   <div className="text-white/60 group-hover:text-black transition">
                     Your Rating:
                   </div>
-                  <RatingStars initialValue={userSetting?.rating} />
+                  <RatingStars
+                    initialValue={rating}
+                    onRatingChanged={onRatingChanged}
+                  />
                 </Button>
               </div>
               <div className="flex flex-col gap-0 mb-2">
@@ -99,7 +117,7 @@ const MovieInfoBanner = ({ moviePayload, userSetting }: Props) => {
               <div className="grid grid-cols-3 gap-6">
                 {crew.map((member) => {
                   return (
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1" key={member.id}>
                       <div className="text-white font-bold">{member.name}</div>
                       <div className="text-white">{member.job}</div>
                     </div>

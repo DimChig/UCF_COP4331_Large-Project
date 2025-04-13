@@ -8,7 +8,6 @@ import MovieDetailsPage from "./pages/movies/[id]/MovieDetailsPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import RegisterPage from "./pages/register/RegisterPage";
 import SearchPage from "./pages/search/SearchPage";
-import CardDetailsPage from "./pages/cards/[cardId]/CardDetailsPage";
 
 const router = createBrowserRouter([
   {
@@ -40,11 +39,7 @@ const router = createBrowserRouter([
         element: <ProfilePage />,
       },
       {
-        path: "movies/:cardId",
-        element: <CardDetailsPage />,
-      },
-      {
-        path: "movies2/:movieId",
+        path: "movies/:movieId",
         element: <MovieDetailsPage />,
       },
     ],

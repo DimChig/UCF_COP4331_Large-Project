@@ -18,8 +18,29 @@ const MovieDetailsContainer = ({ moviePayload, userSetting }: Props) => {
   const [isSaved, setIsSaved] = useState(userSetting?.isSaved || false);
   const [rating, setRating] = useState(userSetting?.rating || 0);
 
+  const onLiked = () => {
+    console.log("Liked");
+  };
+
+  const onSaved = () => {
+    console.log("Saved");
+  };
+
+  const onRatingChanged = (newRating: number) => {
+    console.log("New rating:", newRating);
+  };
+
   return (
-    <MovieInfoBanner moviePayload={moviePayload} userSetting={userSetting} />
+    <MovieInfoBanner
+      moviePayload={moviePayload}
+      userSetting={userSetting}
+      isLiked={isLiked}
+      onLiked={onLiked}
+      isSaved={isSaved}
+      onSaved={onSaved}
+      rating={rating}
+      onRatingChanged={onRatingChanged}
+    />
   );
 };
 
