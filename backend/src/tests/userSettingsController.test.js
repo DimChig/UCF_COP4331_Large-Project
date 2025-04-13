@@ -1,12 +1,12 @@
 //Need mock
-jest.mock('../../models/UserSettings');
+jest.mock('../models/UserSettings');
 
 //imports
-const userSettingsController = require('../../controllers/userSettingsController');
+const userSettingsController = require('../controllers/userSettingsController');
 const jwt = require('jsonwebtoken');
-const UserSettings = require('../../models/UserSettings');
-const { updateSettingsSchema, ratingSchema } = require('../../validations/userSettingsValidation');
-const { rateMovie } = require('../../controllers/userSettingsController');
+const UserSettings = require('../models/UserSettings');
+const { updateSettingsSchema, ratingSchema } = require('../validations/userSettingsValidation');
+const { rateMovie } = require('../controllers/userSettingsController');
 
 
 describe('userSettings', () => {
