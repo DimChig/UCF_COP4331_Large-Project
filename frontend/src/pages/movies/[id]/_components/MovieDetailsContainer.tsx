@@ -4,6 +4,7 @@ import { useState } from "react";
 import { baseUrl, getAuthHeader, isAuthenticated } from "@/api/apiClient";
 import AuthDialog from "./AuthDialog";
 import { toast } from "sonner";
+import CommentsSection from "./CommentsSection";
 import MovieCast from "./MovieCast";
 
 interface Props {
@@ -18,11 +19,7 @@ interface Props {
     | undefined;
 }
 
-const MovieDetailsContainer = ({
-  movieId,
-  moviePayload,
-  userSetting,
-}: Props) => {
+const MovieDetailsContainer = ({ movieId, moviePayload, userSetting }: Props) => {
   const [isLiked, setIsLiked] = useState(userSetting?.isLiked || false);
   const [isSaved, setIsSaved] = useState(userSetting?.isSaved || false);
 
@@ -76,17 +73,14 @@ const MovieDetailsContainer = ({
     }
 
     try {
-      const response = await fetch(
-        `${baseUrl}/api/movies/${movieId}/${endpoint}`,
-        {
-          method: method,
-          body: JSON.stringify(payload),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: getAuthHeader(),
-          },
-        }
-      );
+      const response = await fetch(`${baseUrl}/api/movies/${movieId}/${endpoint}`, {
+        method: method,
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: getAuthHeader(),
+        },
+      });
 
       if (!response.ok) {
         toast.error("Failed to like the movie", {
@@ -102,7 +96,7 @@ const MovieDetailsContainer = ({
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <>
       <AuthDialog isOpened={authDialogOpened} setOpened={setAuthDialogOpened} />
       <MovieInfoBanner
         moviePayload={moviePayload}
@@ -113,10 +107,7 @@ const MovieDetailsContainer = ({
         rating={userSetting?.rating || 0}
         onRatingChanged={onRatingChanged}
       />
-      <div className="flex flex-col py-8 px-4">
-        <MovieCast moviePayload={moviePayload} />
-      </div>
-    </div>
+    </>
   );
 };
 
