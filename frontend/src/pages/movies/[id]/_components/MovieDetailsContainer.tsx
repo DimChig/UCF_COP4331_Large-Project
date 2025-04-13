@@ -24,7 +24,6 @@ const MovieDetailsContainer = ({
 }: Props) => {
   const [isLiked, setIsLiked] = useState(userSetting?.isLiked || false);
   const [isSaved, setIsSaved] = useState(userSetting?.isSaved || false);
-  const [rating, setRating] = useState(userSetting?.rating || 0);
 
   const [authDialogOpened, setAuthDialogOpened] = useState(false);
 
@@ -56,6 +55,14 @@ const MovieDetailsContainer = ({
 
   const onRatingChanged = (newRating: number) => {
     console.log("New rating:", newRating);
+
+    if (newRating > 0) {
+      handleUpdate("rating", "POST", { rating: newRating }, () => {
+        toast.success("You rated this movie!");
+      });
+    } else {
+      handleUpdate("rating", "DELETE", {}, () => {});
+    }
   };
 
   const handleUpdate = async (
@@ -74,6 +81,7 @@ const MovieDetailsContainer = ({
         `${baseUrl}/api/movies/${movieId}/${endpoint}`,
         {
           method: method,
+          body: JSON.stringify(payload),
           headers: {
             "Content-Type": "application/json",
             Authorization: getAuthHeader(),
@@ -103,7 +111,7 @@ const MovieDetailsContainer = ({
         onLiked={onLiked}
         isSaved={isSaved}
         onSaved={onSaved}
-        rating={rating}
+        rating={userSetting?.rating || 0}
         onRatingChanged={onRatingChanged}
       />
     </>
