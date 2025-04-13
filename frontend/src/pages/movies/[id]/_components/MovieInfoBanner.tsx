@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MoviePayload } from "@/hooks/useMovies";
 import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart } from "react-icons/fa";
+import BannerHeaderDescription from "./BannerHeaderDescription";
 import ButtonContainer from "./ButtonContainer";
 import RatingStars from "./RatingStars";
 
@@ -47,21 +48,8 @@ const MovieInfoBanner = ({
             />
           </div>
           <div className="flex flex-col">
-            <div className="flex gap-2 items-center">
-              <h1 className="text-white text-4xl font-extrabold mb-1">
-                {movie.title}
-              </h1>
-              <div className="text-white opacity-50 text-3xl">{`(${
-                movie.release_date
-                  ? String(movie.release_date).split("-")[0]
-                  : "2000"
-              })`}</div>
-            </div>
-            <div className="flex gap-2 text-white opacity-85">
-              <div>{movie.release_date}</div>
-              <div>•</div>
-              <div>Todo</div>
-            </div>
+            <BannerHeaderDescription movie={movie} />
+
             <div className="flex flex-col gap-5 mt-3">
               <div className="flex  ">
                 <span className="text-white inline-block font-semibold text-lg mr-2 align-top">
