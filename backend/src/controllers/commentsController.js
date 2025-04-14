@@ -58,15 +58,6 @@ exports.postComment = async (req, res) => {
  */
 exports.deleteComment = async (req, res) => {
   try {
-    // Validate Movie ID
-    const validationMovieId = movieIdSchema.safeParse({
-      movieId: Number(req.params.movieId),
-    });
-    if (!validationMovieId.success) {
-      return res.status(400).json(validationMovieId.error.errors);
-    }
-    const { movieId } = validationMovieId.data;
-
     // Validate Comment ID
     const validationCommentId = objectIdSchema.safeParse({
       id: req.params.commentId,
@@ -79,7 +70,6 @@ exports.deleteComment = async (req, res) => {
     // Delete comment from DB
     const deletedComment = await Comment.findOneAndDelete({
       _id: commentId,
-      movieId: movieId,
       userId: req.user._id,
     });
 

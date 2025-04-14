@@ -81,7 +81,7 @@ router.post(
 
 // Delete comment
 router.delete(
-  "/api/movies/:movieId/comments/:commentId",
+  "/api/comments/:commentId",
   jwtMiddleware,
   commentsController.deleteComment
 );
