@@ -21,7 +21,7 @@ const commentsSchema = new mongoose.Schema(
       required: false,
       trim: true,
       minlength: 1,
-      maxlength: 500,
+      maxlength: 1000,
     },
   },
   //get timestamps

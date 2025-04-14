@@ -1,3 +1,4 @@
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CommentData } from "@/hooks/useComments";
 import { FaStar } from "react-icons/fa";
 
@@ -7,20 +8,23 @@ interface Props {
 
 const Review = ({ comment }: Props) => {
   return (
-    <div>
-      <h3 className="text-lg font-semibold">
-        {`${comment.author.firstName} ${comment.author.lastName}`}
-      </h3>
-      <span>{new Date(comment.createdAt).toLocaleDateString()}</span>
-      <p>{comment.text}</p>
-      {/* API currently does not have the rating in the comment data. */}
-      {comment.rating && (
-        <span className="text-gray-400 flex flex-row items-center gap-0.5">
-          {comment.rating}
-          <FaStar className="width-20 height-20" />
-        </span>
-      )}
-    </div>
+    <Card>
+      <CardHeader>
+        <h3 className="text-lg font-semibold">
+          {`${comment.author.firstName} ${comment.author.lastName}`}
+        </h3>
+        <span>{new Date(comment.createdAt).toLocaleDateString()}</span>
+      </CardHeader>
+      <CardContent>
+        <p>{comment.text}</p>
+        {comment.rating && (
+          <span className="text-gray-400 flex flex-row items-center gap-0.5">
+            {comment.rating}
+            <FaStar className="width-20 height-20" />
+          </span>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

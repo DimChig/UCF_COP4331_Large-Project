@@ -51,9 +51,9 @@ const CommentsSection = ({ movieId }: Props) => {
       <h2 className="text-2xl font-semibold pt-4 pb-2">Comments</h2>
       <div className="flex flex-col justify-center items-center">
         <Card className="w-full md:w-4/5 p-5">
-          <WriteComment onComment={onComment} />
-          <hr />
           <PostedComments movieId={movieId} />
+          <hr />
+          <WriteComment onComment={onComment} />
         </Card>
       </div>
     </div>
