@@ -12,7 +12,7 @@ const CommentsSection = ({ movieId }: Props) => {
       <div className="flex flex-col justify-center items-center">
         <div className="w-full py-2">
           <PostedComments movieId={movieId} />
-          <div className="w-full mt-4">
+          <div className="w-full mt-8">
             <WriteComment movieId={movieId} />
           </div>
         </div>
