@@ -17,7 +17,7 @@ const MovieMedia = ({ images }: Props) => {
               <img
                 src={`https://image.tmdb.org/t/p/original/${image.file_path}`}
                 alt={image.file_path}
-                className="w-full"
+                className="w-full rounded-lg"
               />
             </div>
           ))}
