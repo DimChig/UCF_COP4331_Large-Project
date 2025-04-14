@@ -50,8 +50,10 @@ const Review = ({ comment }: Props) => {
           )}
         </div>
       </CardHeader>
-      <CardContent>
-        <p>{comment.text}</p>
+      <CardContent className="w-full overflow-hidden">
+        <span className="w-full whitespace-normal break-words text-start">
+          {comment.text}
+        </span>
       </CardContent>
     </Card>
   );
