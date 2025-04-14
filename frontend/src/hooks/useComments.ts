@@ -49,6 +49,18 @@ export const useMovieComments = (movieId: number) => {
   });
 };
 
+export const useMovieCommentsSummary = (movieId: number) => {
+  return useQuery<string>({
+    queryKey: ["comments", movieId, "summary"],
+    queryFn: () => {
+      return axiosInstance
+        .get<string>(`/api/movies/${movieId}/comments/summary`)
+        .then((res) => res.data);
+    },
+    retry: 2,
+  });
+};
+
 export const useCommentsProfile = () => {
   return useQuery<FetchResponseAllUserComments>({
     queryKey: ["comments", getAuthToken()],

@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { useMovieComments } from "@/hooks/useComments";
+import { CommentData } from "@/hooks/useComments";
 import Comment from "./Comment";
 import { Button } from "@/components/ui/button";
 
 interface Props {
-  movieId: number;
+  comments: CommentData[];
+  isLoading: boolean;
+  error: Error | null;
 }
 
-const PostedComments = ({ movieId }: Props) => {
-  const { data, isLoading, error } = useMovieComments(movieId);
-  const comments = data?.results ?? [];
+const PostedComments = ({ comments, isLoading, error }: Props) => {
   const [showAll, setShowAll] = useState(false);
 
   if (isLoading) {
