@@ -250,7 +250,9 @@ exports.getCommentsSummary = async (req, res) => {
     );
     // Extract only the text from the comment objects
     const comments = commentObjects.map((comment) => comment.text);
-
+    if (comments.length === 0) {
+      return res.status(404).json({ error: "No comments yet" });
+    }
     // Call OpenAI API to get summary
     const summary = await getCommentsSummary(comments);
 
