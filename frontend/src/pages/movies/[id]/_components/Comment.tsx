@@ -23,8 +23,13 @@ const Review = ({ comment }: Props) => {
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <div className="text-lg font-bold">
-                {`${comment.author.firstName} ${comment.author.lastName}`}
+              <div className="flex flex-row items-center gap-2">
+                <div className="text-lg font-bold">
+                  {`${comment.author.firstName} ${comment.author.lastName}`}
+                </div>
+                {comment.isMine && (
+                  <div className="opacity-50 text-sm">(You)</div>
+                )}
               </div>
               <div className="flex flex-row items-center gap-2">
                 {comment.rating && (
