@@ -18,7 +18,7 @@ const PostedComments = ({ movieId }: Props) => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       {comments.map((comment) => (
         <Comment comment={comment} key={comment.id} />
       ))}

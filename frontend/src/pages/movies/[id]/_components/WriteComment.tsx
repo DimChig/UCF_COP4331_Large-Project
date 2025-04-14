@@ -8,6 +8,7 @@ import {
   FormControl,
   FormDescription,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,9 @@ interface Props {
 }
 
 const formSchema = z.object({
-  text: z.string().nonempty({ message: "Comments cannot be empty!" }),
+  text: z.string().nonempty({ message: "Comments cannot be empty!" }).max(10, {
+    message: "Comments cannot be longer than 1000 characters!",
+  }),
 });
 
 const WriteComment = ({ onComment }: Props) => {
@@ -40,17 +43,19 @@ const WriteComment = ({ onComment }: Props) => {
           name="text"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Write a comment</FormLabel>
+              <FormLabel className="text-xl">Write a comment</FormLabel>
               <FormControl>
                 <Textarea placeholder="Enter your comment here." {...field} />
               </FormControl>
+              <FormMessage />
               <FormDescription>
-                If you gave this movie a rating, it will be included at the end of your comment.
+                If you gave this movie a rating, it will be included at the end
+                of your comment.
               </FormDescription>
             </FormItem>
           )}
         />
-        <Button className="mt-4">Post</Button>
+        <Button className="mt-4">Post Comment</Button>
       </form>
     </Form>
   );

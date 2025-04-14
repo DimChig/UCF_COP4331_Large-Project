@@ -1,6 +1,11 @@
+import { formatDate } from "@/components/movie_card/MovieCard";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CommentData } from "@/hooks/useComments";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaTrash } from "react-icons/fa";
+import RatingStarsSimple from "./RatingStarsSimple";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   comment: CommentData;
@@ -8,21 +13,41 @@ interface Props {
 
 const Review = ({ comment }: Props) => {
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
-        <h3 className="text-lg font-semibold">
-          {`${comment.author.firstName} ${comment.author.lastName}`}
-        </h3>
-        <span>{new Date(comment.createdAt).toLocaleDateString()}</span>
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center gap-4">
+            <Avatar>
+              <AvatarFallback>
+                {comment.author.firstName.charAt(0).toUpperCase()}
+                {comment.author.lastName.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <div className="text-lg font-bold">
+                {`${comment.author.firstName} ${comment.author.lastName}`}
+              </div>
+              <div className="flex flex-row items-center gap-2">
+                {comment.rating && (
+                  <Badge className="text-xs text-white bg-transparent">
+                    <RatingStarsSimple rating={comment.rating} />
+                  </Badge>
+                )}
+                <div className="text-sm text-gray-500">
+                  {`Written on ${formatDate(comment.createdAt.toString())}`}
+                </div>
+              </div>
+            </div>
+          </div>
+          {comment.isMine && (
+            <div className="flex flex-row items-center gap-2">
+              <FaTrash className="w-4 h-4 cursor-pointer opacity-50 hover:opacity-100 hover:text-red-500" />
+            </div>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         <p>{comment.text}</p>
-        {comment.rating && (
-          <span className="text-gray-400 flex flex-row items-center gap-0.5">
-            {comment.rating}
-            <FaStar className="width-20 height-20" />
-          </span>
-        )}
       </CardContent>
     </Card>
   );
