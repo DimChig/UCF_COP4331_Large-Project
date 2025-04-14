@@ -38,7 +38,7 @@ const MovieInfoBanner = ({
           />
           <div className="absolute w-full h-full bg-[linear-gradient(to_right,rgba(0,0,0,0.6)_calc(20%),rgba(0,0,0,0.5)_50%,rgba(0,0,0,0.5)_100%)] z-20"></div>{" "}
         </div>
-        <div className="flex flex-row columns-2 p-8 gap-8 h-full w-full ">
+        <div className="flex flex-col md:flex-row p-8 gap-8 h-full w-full ">
           <div className="relative min-w-[300px] aspect-2/3">
             <Skeleton className="w-full aspect-[2/3] rounded-lg" />
             <img
@@ -55,10 +55,7 @@ const MovieInfoBanner = ({
                 <span className="text-white inline-block font-semibold text-lg mr-2 align-top">
                   Average Rating:
                 </span>
-                <RatingBadge
-                  rating={movie.vote_average}
-                  voteCount={movie.vote_count}
-                />
+                <RatingBadge rating={movie.vote_average} voteCount={movie.vote_count} />
               </div>
               <div className="flex gap-4">
                 <ButtonContainer onClick={onLiked}>
@@ -79,19 +76,12 @@ const MovieInfoBanner = ({
                   <div className="text-white/60 group-hover:text-black transition">
                     Your Rating:
                   </div>
-                  <RatingStars
-                    initialValue={rating}
-                    onRatingChanged={onRatingChanged}
-                  />
+                  <RatingStars initialValue={rating} onRatingChanged={onRatingChanged} />
                 </Button>
               </div>
               <div className="flex flex-col gap-2 mb-2">
-                <div className="italic text-white opacity-50">
-                  {movie.tagline}
-                </div>
-                <div className="text-white font-bold text-xl mb-1">
-                  Overview
-                </div>
+                <div className="italic text-white opacity-50">{movie.tagline}</div>
+                <div className="text-white font-bold text-xl mb-1">Overview</div>
                 <div className="text-white">{movie.overview}</div>
               </div>
               <div className="grid grid-cols-3 gap-6">

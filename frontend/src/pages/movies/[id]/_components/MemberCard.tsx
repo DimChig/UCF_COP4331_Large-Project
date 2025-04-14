@@ -8,7 +8,7 @@ interface Props {
 
 const MemberCard = ({ name, character, photo }: Props) => {
   return (
-    <Card className="w-[160px] p-0 gap-2 overflow-hidden">
+    <Card className="min-w-[160px] p-0 gap-2 overflow-hidden">
       <CardHeader className="h-fit w-full p-0">
         <div className="w-full">
           <img
