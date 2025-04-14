@@ -21,6 +21,7 @@ export interface CommentData {
   text: string;
   createdAt: Date;
   isMine: boolean;
+  rating: number | null;
 }
 
 interface FetchResponseMovieComments {

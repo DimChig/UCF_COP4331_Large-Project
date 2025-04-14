@@ -14,12 +14,12 @@ const Review = ({ comment }: Props) => {
       <span>{new Date(comment.createdAt).toLocaleDateString()}</span>
       <p>{comment.text}</p>
       {/* API currently does not have the rating in the comment data. */}
-      {
-        /* {rating && */ <span className="text-gray-400 flex flex-row items-center gap-0.5">
-          {5}
+      {comment.rating && (
+        <span className="text-gray-400 flex flex-row items-center gap-0.5">
+          {comment.rating}
           <FaStar className="width-20 height-20" />
         </span>
-      }
+      )}
     </div>
   );
 };

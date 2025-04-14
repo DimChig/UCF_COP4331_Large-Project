@@ -2,13 +2,11 @@ import { useMovieComments } from "@/hooks/useComments";
 import Comment from "./Comment";
 
 interface Props {
-  // comments: CommentData[] | undefined;
   movieId: number;
 }
 
 const PostedComments = ({ movieId }: Props) => {
-  //TODO CHANGE TO movieId
-  const { data, isLoading, error } = useMovieComments(1);
+  const { data, isLoading, error } = useMovieComments(movieId);
   const comments = data?.results ?? [];
 
   if (isLoading) {
