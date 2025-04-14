@@ -29,8 +29,8 @@ const PostedComments = ({ movieId }: Props) => {
         <Comment comment={comment} key={comment.id} />
       ))}
       {comments.length === 0 && (
-        <p className="text-gray-400 text-center text-lg">
-          Its awfully empty here... Be the first one to post a comment!
+        <p className="text-start text-lg">
+          We don't have any comments yet for this movie. Be the first one!
         </p>
       )}
       {comments.length > 3 && (
