@@ -49,10 +49,11 @@ const CommentsSection = ({ movieId }: Props) => {
     <div className="w-full px-6">
       <h2 className="text-2xl font-semibold pt-4 pb-2">Comments</h2>
       <div className="flex flex-col justify-center items-center">
-        <div className="w-full p-5">
+        <div className="w-full py-2">
           <PostedComments movieId={movieId} />
-          <hr />
-          <WriteComment onComment={onComment} />
+          <div className="w-full mt-4">
+            <WriteComment onComment={onComment} />
+          </div>
         </div>
       </div>
     </div>

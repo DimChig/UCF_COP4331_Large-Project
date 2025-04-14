@@ -3,9 +3,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CommentData } from "@/hooks/useComments";
-import { FaStar, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import RatingStarsSimple from "./RatingStarsSimple";
-import { Button } from "@/components/ui/button";
 
 interface Props {
   comment: CommentData;

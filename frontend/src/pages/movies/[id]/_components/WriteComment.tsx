@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 interface Props {
   onComment: (commentText: string) => void;
@@ -36,28 +37,30 @@ const WriteComment = ({ onComment }: Props) => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="text"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-xl">Write a comment</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter your comment here." {...field} />
-              </FormControl>
-              <FormMessage />
-              <FormDescription>
-                If you gave this movie a rating, it will be included at the end
-                of your comment.
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <Button className="mt-4">Post Comment</Button>
-      </form>
-    </Form>
+    <Card className="p-6">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="text"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-xl">Write a comment</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Enter your comment here." {...field} />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>
+                  If you gave this movie a rating, it will be included at the
+                  end of your comment.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <Button className="mt-4">Post Comment</Button>
+        </form>
+      </Form>
+    </Card>
   );
 };
 
