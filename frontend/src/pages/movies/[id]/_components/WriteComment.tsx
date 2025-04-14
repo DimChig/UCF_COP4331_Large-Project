@@ -103,6 +103,7 @@ const WriteComment = ({ movieId }: Props) => {
                   <FormLabel className="text-xl">Write a comment</FormLabel>
                   <FormControl>
                     <Textarea
+                      className="h-24"
                       placeholder="Enter your comment here."
                       {...field}
                     />
