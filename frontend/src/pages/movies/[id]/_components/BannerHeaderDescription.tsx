@@ -28,17 +28,19 @@ const BannerHeaderDescription = ({ movie }: Props) => {
     <>
       <div className="flex gap-2 items-center w-full">
         {movie.title.length < 40 ? (
-          <h1 className="text-white text-4xl font-extrabold">{movie.title}</h1>
+          <h1 className="text-white text-3xl lg:text-4xl font-extrabold">
+            {movie.title}
+          </h1>
         ) : (
-          <h1 className="text-white text-3xl font-extrabold truncate max-w-[95%] pb-2">
+          <h1 className="text-white text-xl lg:text-3xl font-extrabold truncate max-w-[95%] pb-2">
             {movie.title}
           </h1>
         )}
-        <div className="text-white opacity-50 text-3xl">{`(${
+        <div className="text-white opacity-50 text-2xl lg:text-3xl hidden md:block">{`(${
           movie.release_date ? String(movie.release_date).split("-")[0] : "2000"
         })`}</div>
       </div>
-      <div className="flex gap-2 text-white opacity-85">
+      <div className="flex gap-2 text-white opacity-85 text-xs lg:text-base">
         <div>{movie.release_date}</div>
         {movie.genres && (
           <>
