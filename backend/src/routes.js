@@ -100,6 +100,12 @@ router.get(
   commentsController.getAllUserComments
 );
 
+// Get comments AI SUMMARY
+router.get(
+  "/api/movies/:movieId/comments/summary",
+  commentsController.getCommentsSummary
+);
+
 // GET /api/movie
 router.get("/api/movies", movieController.getMovies);
 

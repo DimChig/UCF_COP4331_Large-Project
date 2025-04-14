@@ -4,7 +4,7 @@ const { commentSchema } = require("../validations/commentValidation");
 const { movieIdSchema } = require("../validations/movieValidation");
 const { objectIdSchema } = require("../validations/objectIdValidation");
 const getMovieDBClient = require("../config/tmdb");
-
+const { getCommentsSummary } = require("../controllers/openaiController");
 // Get moviedb client
 const moviedb = getMovieDBClient();
 
@@ -227,6 +227,35 @@ exports.getAllUserComments = async (req, res) => {
       results: validMovies,
       total_results: validMovies.length,
     });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
+
+exports.getCommentsSummary = async (req, res) => {
+  try {
+    // Validate Movie ID
+    const validationMovieId = movieIdSchema.safeParse({
+      movieId: Number(req.params.movieId),
+    });
+    if (!validationMovieId.success) {
+      return res.status(400).json(validationMovieId.error.errors);
+    }
+    const { movieId } = validationMovieId.data;
+
+    // Get comments
+    const commentObjects = await Comment.find({ movieId: movieId }).select(
+      "text"
+    );
+    // Extract only the text from the comment objects
+    const comments = commentObjects.map((comment) => comment.text);
+
+    // Call OpenAI API to get summary
+    const summary = await getCommentsSummary(comments);
+
+    // Return
+    return res.status(200).json(summary);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Server Error" });
