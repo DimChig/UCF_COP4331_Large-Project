@@ -1,9 +1,9 @@
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import axios, { AxiosRequestConfig } from "axios";
-import { getAuthHeader, getAuthToken } from "@/api/apiClient";
+import { baseUrl, getAuthHeader, getAuthToken } from "@/api/apiClient";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/",
+  baseURL: baseUrl,
 });
 
 export interface MovieData {
