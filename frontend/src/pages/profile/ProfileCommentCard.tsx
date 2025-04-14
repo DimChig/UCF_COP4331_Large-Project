@@ -38,7 +38,9 @@ const ProfileCommentCard = ({ movie, text, createdAt }: Props) => {
             {movie.title}
           </div>
           <div className="flex gap-1 px-2">
-            <div className="text-md font-bold truncate">"{text}"</div>
+            <div className="text-md font-bold truncate max-w-[300px]">
+              "{text}"
+            </div>
           </div>
           <div className="w-full text-end text-xs opacity-20">
             {formatDate(String(createdAt))}
