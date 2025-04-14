@@ -1,5 +1,4 @@
-const { text } = require("express");
-const Comments = require("../models/Comments");
+const UserSettings = require("../models/UserSettings");
 const Comment = require("../models/Comments");
 const { commentSchema } = require("../validations/commentValidation");
 const { movieIdSchema } = require("../validations/movieValidation");
@@ -96,7 +95,18 @@ exports.deleteComment = async (req, res) => {
   }
 };
 
-// Search cards
+const getUserRating = async (userId, movieId) => {
+  const userSettings = await UserSettings.findOne({
+    userId: userId,
+    movieId: movieId,
+  });
+  if (!userSettings) {
+    return null;
+  }
+  return userSettings.rating;
+};
+
+// Search comments
 /**
  * GET /api/movies/{movieId}/comments
  * Returns comments for a given movie. Each comment contains:
@@ -136,18 +146,24 @@ exports.getComments = async (req, res) => {
     );
 
     // Preprocess cards (reassign fields)
-    const ret = comments.map((comment) => ({
-      id: comment._id,
-      text: comment.text,
-      createdAt: comment.createdAt,
-      author: {
-        firstName: comment.userId.firstName,
-        lastName: comment.userId.lastName,
-      },
-      isMine: req.user
-        ? comment.userId._id.toString() === req.user._id.toString()
-        : false,
-    }));
+    const ret = await Promise.all(
+      comments.map(async (comment) => {
+        const rating = await getUserRating(comment.userId, movieId);
+        return {
+          id: comment._id,
+          text: comment.text,
+          createdAt: comment.createdAt,
+          author: {
+            firstName: comment.userId.firstName,
+            lastName: comment.userId.lastName,
+          },
+          isMine: req.user
+            ? comment.userId._id.toString() === req.user._id.toString()
+            : false,
+          rating: rating,
+        };
+      })
+    );
 
     // Sort: First by isMine (mine first) and then by createdAt (most recent first)
     ret.sort((a, b) => {
