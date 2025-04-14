@@ -56,8 +56,6 @@ const WriteComment = ({ movieId }: Props) => {
     }
     setIsLoading(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     try {
       const response = await fetch(
         `${baseUrl}/api/movies/${movieId}/comments`,
